@@ -1,14 +1,25 @@
 <?php
 require("src/funciones.php");
+require("src/bd_config.php");
+ try
+ {
+     $conexion=mysqli_connect(SERVIDOR_BD,USUARIO_BD,CLAVE_BD,NOMBRE_BD);
+     mysqli_set_charset($conexion,"utf8");
+ }
+ catch(Exception $e)
+ {
+     die("Imposible conectar. Error Nº ".mysqli_connect_errno()." : ".mysqli_connect_error()); 
+ }
+ 
 if (isset($_POST['btnEntrar'])) {
     $error_nombre = $_POST["nombre"] == "";
     $error_clave = $_POST["clave"] == "";
     $error_form = $error_nombre || $error_clave;
 }
 
-if (isset($_POST['btnRegistro'])) {
+if (isset($_POST['btnEnviar'])) {
     $error_usuario = $_POST['usuario'] == "";
-    $error_nombre = $_POST["nombre"] == "";
+    $error_nombre = $_POST['nombre'] == "";
     $error_clave = $_POST["clave"] == "";
     $error_dni = $_POST["dni"] == "" || !dni_bien_escrito($_POST["dni"]) || !dni_valido($_POST["dni"]);
     $error_sexo = !isset($_POST["sexo"]);
@@ -33,7 +44,7 @@ if (isset($_POST['btnRegistro'])) {
     <h1>Practica Rec 2</h1>
 
     <?php
-    if ((isset($_POST["btnEntrar"])||isset($_POST["btnRegistro"])) && !$error_form) {
+    if ((isset($_POST["btnEntrar"])||isset($_POST["btnEnviar"])) && !$error_form) {
         require "vistas/vista_info.php";
     } else if (isset($_POST["btnRegistro"])) {
         require "vistas/vista_formulario_registro.php";

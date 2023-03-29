@@ -17,7 +17,7 @@
             echo $_POST["nombre"]; ?>" id="nombre">
         <?php
 
-        if (isset($_POST['nombre']) && $error_nombre) {
+        if (isset($_POST["nombre"]) && $error_formulario) {
             echo "<span class='error'>* Debes rellenar el nombre *</span>";
         }
 
