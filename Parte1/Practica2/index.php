@@ -1,18 +1,20 @@
 <?php
+require("src/funciones.php");
 if (isset($_POST['btnEntrar'])) {
     $error_nombre = $_POST["nombre"] == "";
     $error_clave = $_POST["clave"] == "";
-
     $error_form = $error_nombre || $error_clave;
 }
 
 if (isset($_POST['btnRegistro'])) {
-    $error_usuario = $_POST['usuario']=="";
+    $error_usuario = $_POST['usuario'] == "";
     $error_nombre = $_POST["nombre"] == "";
     $error_clave = $_POST["clave"] == "";
-    
-
-    $error_form = $error_nombre || $error_clave;
+    $error_dni = $_POST["dni"] == "" || !dni_bien_escrito($_POST["dni"]) || !dni_valido($_POST["dni"]);
+    $error_sexo = !isset($_POST["sexo"]);
+    $error_suscrip = !isset($_POST["suscrip"]);
+    $error_foto = $_FILE["foto"]["name"]!="" && ($_FILE["foto"]["error"] || !getimagesize($_FILE["foto"]["tmp_name"])) || $_FILE["foto"]["size"] >500*1000;
+    $error_form = $error_usuario || $error_nombre || $error_clave || $error_dni || $error_sexo || $error_foto || $error_suscrip;
 }
 
 ?>
@@ -31,7 +33,7 @@ if (isset($_POST['btnRegistro'])) {
     <h1>Practica Rec 2</h1>
 
     <?php
-    if (isset($_POST["btnEntrar"]) && !$error_form) {
+    if ((isset($_POST["btnEntrar"])||isset($_POST["btnRegistro"])) && !$error_form) {
         require "vistas/vista_info.php";
     } else if (isset($_POST["btnRegistro"])) {
         require "vistas/vista_formulario_registro.php";

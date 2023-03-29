@@ -23,7 +23,7 @@ if (isset($_POST["btnBorrar"])) {
 if (isset($_POST["btnEnviar"])) {
     $error_usuario = $_POST["usuario"] == "";
     $error_nombre = $_POST["nombre"] == "";
-    $error_dni = $_POST["dni"] == "" || !dni_bien_escrito($_POST["dni"]);
+    $error_dni = $_POST["dni"] == "" || !dni_bien_escrito($_POST["dni"]) || !dni_valido($_POST["dni"]);
     $error_clave = $_POST["clave"] == "";
     $error_sexo = !isset($_POST["sexo"]);
     $error_suscrip = !isset($_POST["suscrip"]);

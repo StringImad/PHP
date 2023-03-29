@@ -1,0 +1,1 @@
+<p>Bienvenido <?php echo $_POST["nombre"]; ?></p> <a href="index.php">Salir</a>
