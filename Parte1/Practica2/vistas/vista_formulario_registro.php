@@ -1,11 +1,11 @@
-<form method="post" action="index.php">
+<form method="post" action="index.php" enctype="multipart/form-data">
     <p>
         <label for="usuario">usuario: </label>
         <input type="text" name="usuario" value="<?php if (isset($_POST["usuario"]))
             echo $_POST["usuario"]; ?>" id="usuario">
         <?php
 
-        if (isset($_POST['usuario']) && $error_usuario) {
+        if (isset($_POST['btnEnviar']) && $error_usuario) {
             echo "<span class='error'>* Debes rellenar el usuario *</span>";
         }
 
@@ -17,7 +17,7 @@
             echo $_POST["nombre"]; ?>" id="nombre">
         <?php
 
-        if (isset($_POST["nombre"]) && $error_formulario) {
+        if (isset($_POST["btnEnviar"]) && $error_nombre) {
             echo "<span class='error'>* Debes rellenar el nombre *</span>";
         }
 
@@ -26,9 +26,9 @@
 
     <p>
         <label for="clave">Contraseña: </label>
-        <input type="passoword" name="clave" id="clave">
+        <input type="password" name="clave" id="clave">
         <?php
-        if (isset($_POST["btnEntrar"]) && $error_clave) {
+        if (isset($_POST["btnEnviar"]) && $error_clave) {
             echo "<span class='error'>* Debes rellenar la clave *</span>";
 
         }
@@ -38,7 +38,7 @@
         <input type="text" placeholder="11223344Z" name="dni" id="dni" value="<?php if (isset($_POST['dni']))
             echo $_POST['dni']; ?>">
         <?php
-        if (isset($_POST['dni']) && $error_dni) {
+        if (isset($_POST['btnEnviar']) && $error_dni) {
 
             if ($_POST["dni"] == "") {
                 echo "<span class='error'>* Campo vacio *</span>";
