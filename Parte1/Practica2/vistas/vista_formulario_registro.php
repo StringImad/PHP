@@ -90,11 +90,7 @@
             echo "checked"; ?>>
 
         <label for="suscrip">Suscribirme al boletín de novedades</label>
-        <?php
-        if (isset($_POST['btnEnviar']) && $error_suscrip) {
-            echo "<span class='error'>*Debes marcar la suscripción*</span>";
-        }
-        ?>
+       
     </p>
     <p>
         <button type="submit" name="btnEnviar">Guardar Cambios</button>

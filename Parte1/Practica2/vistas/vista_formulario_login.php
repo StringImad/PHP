@@ -1,14 +1,15 @@
 <form method="post" action="index.php">
         <p>
-            <label for="nombre">Nombre: </label>
-            <input type="text" name="nombre" value="<?php if (isset($_POST["nombre"]))
-                echo $_POST["nombre"]; ?>" id="nombre">
-            <?php
-
-            if (isset($_POST['nombre']) && $error_nombre) {
-                echo "<span class='error'>* Debes rellenar el nombre *</span>";
-            }
-
+            <label for="usuario_log">Usuario: </label>
+            <input type="text" name="usuario_log" value="<?php if (isset($_POST["usuario"]))
+                echo $_POST["usuario"]; ?>" id="usuario_log">
+         
+              <?php
+            if (isset($_POST["btnEntrar"]) && $error_usuario)
+                if ($_POST["usuario_log"] == "")
+                echo "<span class='error'>* Debes rellenar el usuario *</span>";
+                else
+                    echo "<span class='error'>* Usuario no se encuentra registrado en BD *</span>";
             ?>
         </p>
         <p>

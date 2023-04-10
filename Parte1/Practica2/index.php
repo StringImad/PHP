@@ -1,6 +1,12 @@
 <?php
+//Siempre que se trabaja con sesiones hay que poner nombre y comenzarla
+session_name("primer_login_22_33");
+session_start();
+define("MINUTOS", 10);
+
 require("src/funciones.php");
 require("src/bd_config.php");
+
 $error_form = true;
 $error_formulario_registro = true;
 //si le dan a boton borrar del registro
@@ -10,9 +16,9 @@ if (isset($_POST["btnBorrar"])) {
 
 //boton entrar del login
 if (isset($_POST['btnEntrar'])) {
-    $error_nombre = $_POST["nombre"] == "";
+    $error_usuario = $_POST["usuario_log"] == "";
     $error_clave = $_POST["clave"] == "";
-    $error_form = $error_nombre || $error_clave;
+    $error_form = $error_usuario || $error_clave;
 
     //si  no hay error en al hacer login buscar el usuario
 
@@ -29,14 +35,18 @@ if (isset($_POST['btnEntrar'])) {
 
         //consulata con la BD
         try {
-            $consulta = "select * from usuarios where usuario='" . $_POST["usuario"] . "' and clave='" . md5($_POST["clave"]) . "'";
+            echo $_POST["usuario_log"];
+            echo md5($_POST["clave"]) ;
+
+            $consulta = "select * from usuarios where usuario='" . $_POST["usuario_log"] . "' and clave='" . md5($_POST["clave"]) . "'";
             $resultado = mysqli_query($conexion, $consulta);
             $usuario_registrado = mysqli_num_rows($resultado) > 0;
+            print_r($usuario_registrado);
 
             mysqli_free_result($resultado);
             mysqli_close($conexion);
             if ($usuario_registrado) {
-                $_SESSION["usuario"] = $_POST["usuario"];
+                $_SESSION["usuario"] = $_POST["usuario_log"];
                 $_SESSION["clave"] = md5($_POST["clave"]);
                 $_SESSION["ultimo_acceso"] = time();
                 header("Location:index.php");
@@ -59,11 +69,14 @@ if (isset($_POST['btnEnviar'])) {
     $error_clave = $_POST["clave"] == "";
     $error_dni = $_POST["dni"] == "" || !dni_bien_escrito($_POST["dni"]) || !dni_valido($_POST["dni"]);
     $error_sexo = !isset($_POST["sexo"]);
-    $error_suscrip = !isset($_POST["suscrip"]);
     $error_foto = $_FILES["foto"]["name"] != "" && ($_FILES["foto"]["error"] || !getimagesize($_FILES["foto"]["tmp_name"]) || $_FILES["foto"]["size"] > 500 * 1000);
 
-    $error_formulario_registro = $error_usuario || $error_nombre || $error_clave || $error_dni || $error_sexo || $error_foto || $error_suscrip;
+    $error_formulario_registro = $error_usuario || $error_nombre || $error_clave || $error_dni || $error_sexo || $error_foto;
+    $sus = 0;
 
+    if(isset($_POST["suscrip"])){
+        $sus = 1;
+    }
     //si no hay error en el registro meter nuevo usuario
 
     if (!$error_formulario_registro) {
@@ -75,7 +88,7 @@ if (isset($_POST['btnEnviar'])) {
             die("Imposible conectar. Error Nº " . mysqli_connect_errno() . " : " . mysqli_connect_error());
         }
 
-        $consulta = "insert into usuarios(nombre,usuario,clave,dni,sexo,foto,suscrip,tipo) values ('" . $_POST["nombre"] . "','" . $_POST["usuario"] . "','" . md5($_POST["clave"]) . "','" . $_POST["dni"] . "','" . $_POST["sexo"] . "','" . $_FILES["foto"]["name"] . "','" . $_POST["suscrip"] . "','admin')";
+        $consulta = "insert into usuarios(usuario,clave,nombre,dni,sexo,foto,subscripcion,tipo) values ('" . $_POST["usuario"] . "','" . md5($_POST["clave"]) ."','" . $_POST["nombre"] .  "','" . $_POST["dni"] . "','" . $_POST["sexo"] . "','" . $_FILES["foto"]["name"] . "','" . $sus. "','admin')";
 
         try {
 
@@ -114,26 +127,8 @@ if (isset($_POST['btnEnviar'])) {
     <?php
 
 
-    // //si le da al boton de registro se reenvia al formulario de registro
-    // if (isset($_POST["btnRegistro"])) {
-    //     require "vistas/vista_formulario_registro.php";
-    // }
-    // //Si ha enviado el formulario y hay error en el formulario de registro se vuelve a mostrar el formulario
-    // if (isset($_POST["btnEnviar"]) && $error_formulario_registro) {
-    //     require "vistas/vista_formulario_registro.php";
-    
-    // }
-    
-    // if ((isset($_POST["btnEntrar"]) && !$error_form) || (isset($_POST["btnEnviar"]) && !$error_formulario_registro)) {
-    //     require "vistas/vista_info.php";
-    // } else {
-    //     require "vistas/vista_formulario_login.php";
-    
-    // }
-    define("MINUTOS", 10);
+  
 
-    session_name("primer_login_22_33");
-    session_start();
     //Estas 3 variables existen cuando me he logeado, si no, no cumples ninguna
     if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"]) && (isset($_SESSION["ultimo_acceso"]))) {
 
@@ -144,7 +139,7 @@ if (isset($_POST['btnEnviar'])) {
         if ($datos_usuario_log["tipo"] == "normal")
             require "vistas/vista_normal.php";
         else
-            require "vistas/vista_admin.php";
+            require "vistas/Admin/vista_admin.php";
 
         mysqli_close($conexion);
     } elseif (isset($_POST["btnRegistro"]) || isset($_POST["btnEnviar"])) {
