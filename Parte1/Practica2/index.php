@@ -36,7 +36,7 @@ if (isset($_POST['btnEntrar'])) {
         //consulata con la BD
         try {
             echo $_POST["usuario_log"];
-            echo md5($_POST["clave"]) ;
+            echo md5($_POST["clave"]);
 
             $consulta = "select * from usuarios where usuario='" . $_POST["usuario_log"] . "' and clave='" . md5($_POST["clave"]) . "'";
             $resultado = mysqli_query($conexion, $consulta);
@@ -74,7 +74,7 @@ if (isset($_POST['btnEnviar'])) {
     $error_formulario_registro = $error_usuario || $error_nombre || $error_clave || $error_dni || $error_sexo || $error_foto;
     $sus = 0;
 
-    if(isset($_POST["suscrip"])){
+    if (isset($_POST["suscrip"])) {
         $sus = 1;
     }
     //si no hay error en el registro meter nuevo usuario
@@ -88,7 +88,7 @@ if (isset($_POST['btnEnviar'])) {
             die("Imposible conectar. Error Nº " . mysqli_connect_errno() . " : " . mysqli_connect_error());
         }
 
-        $consulta = "insert into usuarios(usuario,clave,nombre,dni,sexo,foto,subscripcion,tipo) values ('" . $_POST["usuario"] . "','" . md5($_POST["clave"]) ."','" . $_POST["nombre"] .  "','" . $_POST["dni"] . "','" . $_POST["sexo"] . "','" . $_FILES["foto"]["name"] . "','" . $sus. "','admin')";
+        $consulta = "insert into usuarios(usuario,clave,nombre,dni,sexo,foto,subscripcion,tipo) values ('" . $_POST["usuario"] . "','" . md5($_POST["clave"]) . "','" . $_POST["nombre"] .  "','" . $_POST["dni"] . "','" . $_POST["sexo"] . "','" . $_FILES["foto"]["name"] . "','" . $sus . "','admin')";
 
         try {
 
@@ -119,16 +119,24 @@ if (isset($_POST['btnEnviar'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practica Rec 2</title>
+    <style>
+        .en_linea {
+            display: none;
+        }
+        .enlace{
+            background-color: none;
+            border: none;
+            text-decoration: underline;
+            color: blue;
+            
+        }
+    </style>
 </head>
 
 <body>
     <h1>Practica Rec 2</h1>
 
     <?php
-
-
-  
-
     //Estas 3 variables existen cuando me he logeado, si no, no cumples ninguna
     if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"]) && (isset($_SESSION["ultimo_acceso"]))) {
 

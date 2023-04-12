@@ -40,3 +40,4 @@ if ($tiempo_transc > MINUTOS * 60) {
     header("Location:index.php");
     exit;
 }
+
