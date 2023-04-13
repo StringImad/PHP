@@ -11,14 +11,17 @@ if (isset($_SESSION["usuario"])) {
         exit;
     }
     require "src/seguridad.php";
-
+    //Si voy por aqui es que tengo la seguridad pasada (baneo y tiempo):
+    // 1.- Conexion BD abierta
+    //2.- Ultima accion renovada
+    //3.- Usuario logueado en $datos_usuario_log
     if ($datos_usuario_log["tipo"] == "normal")
         require "vistas/vista_normal.php";
     else
-        require "vistas/Admin/vista_admin_PDO.php";
+        require "vistas/Admin/vista_admin.php";
 
     $conexion = null;
-} else if (isset($_POST["btnRegistro"]) || isset($_POST["btnContinuarRegistro"]) || isset($_POST["btnVolver"])) {
+} else if (isset($_POST["btnRegistro"]) || isset($_POST["btnEnviar"]) || isset($_POST["btnVolver"])) {
     //No estoy logueado
     require "vistas/vista_formulario_registro.php";
 } else {

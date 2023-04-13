@@ -1,4 +1,6 @@
 <?php
+require("src/bd_config.php");
+
 try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
 
@@ -9,10 +11,9 @@ try {
             $datos[] =  $_SESSION["clave"];
             $sentencia->execute($datos);
             //!!!!!!!!!!SI ES MENOR O IGUAL A 0!!!!!!!!!!!!!!!
+            $datos_usuario_log=$sentencia->fetch(PDO::FETCH_ASSOC);
             if ($sentencia->rowCount() <= 0) {
                 //si me han baneado creo un mensaje de error y salto al index
-
-
                 $sentencia = null;
                 $conexion = null;
                 session_unset();
@@ -39,6 +40,7 @@ try {
 
     if ($tiempo_transc > MINUTOS * 60) {
         session_unset();
+        $conexion = null;
         $_SESSION["tiempo"] = "Su tiempo de sesión ha expirado";
         header("Location:index.php");
         exit;

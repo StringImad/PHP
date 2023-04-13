@@ -22,7 +22,7 @@ if (isset($_POST['btnEntrar'])) {
                     $_SESSION["ultimo_acceso"] = time();
                     $sentencia = null;
                     $conexion = null;
-                    header("Location:indexProfesor.php");
+                    header("Location:index.php");
                     exit();
                 } else {
                     $error_usuario = true;

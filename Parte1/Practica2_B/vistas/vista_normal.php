@@ -21,5 +21,13 @@ if (isset($_POST["btnSalir"])) {
             <button class='enlace' name='btnSalir'>Salir</button>
         </form>
     </div>
+    <?php
+if(isset($_SESSION["bienvenida"])){
+    echo "<p>".$_SESSION["bienvenida"]."</p>";
+    unset($_SESSION["bienvenida"]);
+
+}
+
+?>
 </body>
 </html>

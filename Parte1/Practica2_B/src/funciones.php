@@ -29,36 +29,57 @@ function repetido($conexion, $tabla, $columna, $valor, $columna_clave = null, $v
         $datos[] = $valor;
     }
 
-    try{
-$sentencia = $conexion->prepare($consulta); //Prepara la consulta
-    $sentencia->execute($datos); //La ejecuta
+    try {
+        $sentencia = $conexion->prepare($consulta); //Prepara la consulta
+        $sentencia->execute($datos); //La ejecuta
 
 
-    $repetido = $sentencia->rowCount() > 0; //Si existe, está repetido
-    $sentencia = null;
+        $repetido = $sentencia->rowCount() > 0; //Si existe, está repetido
+        $sentencia = null;
+    } catch (PDOException $e) {
 
-    } catch (PDOException $e){
-
-        $repetido = "No se ha podido comprobar la BD. Error: ".$e->getMessage();
+        $repetido = "No se ha podido comprobar la BD. Error: " . $e->getMessage();
     }
 
     return $repetido;
 }
+function repetido_reg($columna, $valor)
+{
+    try {
 
-function error_page($title,$encabezado,$mensaje)
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+
+
+        try {
+            $consulta = "select * from usuarios where " . $columna . "=?";
+            $sentencia = $conexion->prepare($consulta); //Prepara la consulta
+            $sentencia->execute($valor); //La ejecuta
+            $repetido = $sentencia->rowCount() > 0; //Si existe, está repetido
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+
+            $repetido = "No se ha podido comprobar la BD. Error: " . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        session_destroy();
+
+        die("<p>Failed to connect" . $e->getMessage() . "</p></body></html>");
+    }
+    return $repetido;
+}
+
+function error_page($title, $encabezado, $mensaje)
 {
     return "<!DOCTYPE html>
     <html lang='es'>
         <head>
             <meta charset='UTF-8'/>
-            <title>".$title."</title>
+            <title>" . $title . "</title>
         </head>
         <body>
-            <h1>".$encabezado."</h1>
-            <p>".$mensaje."</p>
+            <h1>" . $encabezado . "</h1>
+            <p>" . $mensaje . "</p>
         </body>
     </html>";
-    
 }
-
-?>
