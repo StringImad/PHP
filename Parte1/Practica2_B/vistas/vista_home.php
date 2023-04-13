@@ -3,7 +3,7 @@ require("src/funciones.php");
 require("src/bd_config.php");
 if (isset($_POST['btnEntrar'])) {
     $error_usuario = $_POST["usuario_log"] == "";
-    $error_clave = $_POST["clave"] == "";
+    $error_clave = $_POST["clave_log"] == "";
     $error_form = $error_usuario || $error_clave;
     if (!$error_form) {
         try {
@@ -12,8 +12,8 @@ if (isset($_POST['btnEntrar'])) {
             try {
                 $consulta = "select * from usuarios where usuario = ? and clave = ?";
                 $sentencia = $conexion->prepare($consulta);
-                $datos[] = $_POST["usuario"];
-                $datos[] = md5($_POST["clave"]);
+                $datos[] = $_POST["usuario_log"];
+                $datos[] = md5($_POST["clave_log"]);
                 $sentencia->execute($datos);
                 if ($sentencia->rowCount() > 0) {
 
@@ -54,7 +54,6 @@ if (isset($_POST['btnEntrar'])) {
 </head>
 
 <body>
-    <h1>Login</h1>
     <form method="post" action="index.php">
         <p>
             <label for="usuario_log">Usuario: </label>

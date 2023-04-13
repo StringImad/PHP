@@ -5,19 +5,19 @@ session_start();
 define("MINUTOS", 10);
 if (isset($_SESSION["usuario"])) {
     //Estoy logueado
-    if(isset($_POST["btnSalir"])){
+    if (isset($_POST["btnSalir"])) {
         session_destroy();
         header("Location:index.php");
         exit;
     }
-    require "src/seguridadPDO.php";
+    require "src/seguridad.php";
 
     if ($datos_usuario_log["tipo"] == "normal")
         require "vistas/vista_normal.php";
     else
-        require "vistas/Admin/vista_admin.php";
+        require "vistas/Admin/vista_admin_PDO.php";
 
-        $conexion = null;
+    $conexion = null;
 } else if (isset($_POST["btnRegistro"]) || isset($_POST["btnContinuarRegistro"]) || isset($_POST["btnVolver"])) {
     //No estoy logueado
     require "vistas/vista_formulario_registro.php";
