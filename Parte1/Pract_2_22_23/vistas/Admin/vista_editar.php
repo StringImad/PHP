@@ -6,10 +6,10 @@ if (isset($_POST["boton_editar"])) {
     try {
         $id_usuario = $_POST["boton_editar"];
         $consulta = "SELECT * FROM usuarios WHERE id_usuario = ?";
+        $sentencia = $conexion->prepare($consulta);
 
         $sentencia->execute([$id_usuario]);
 
-        $sentencia = $conexion->prepare($consulta);
 
         if ($sentencia->rowCount() > 0) {
             $tupla = $sentencia->fetchAll(PDO::FETCH_ASSOC);
