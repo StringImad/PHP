@@ -14,9 +14,10 @@ if (!isset($POST["pag"])) {
 if (isset($_POST["boton_confirmar_borrar"])) {
 
     try {
-        $id_usuario = $_POST["boton_confirmar_borrar"];
 
         $consulta = "DELETE FROM usuarios WHERE id_usuario = ?";
+        $id_usuario = $_POST["boton_confirmar_borrar"];
+
         $sentencia = $conexion->prepare($consulta);
         $sentencia->execute([$id_usuario]);
 
