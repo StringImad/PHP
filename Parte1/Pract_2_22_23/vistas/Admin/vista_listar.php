@@ -18,7 +18,8 @@ try {
     <th>#</th>
     <th>Foto</th>
     <th>Nombre</th>
-            <th> <form action='index.php' method='post'><button type='submit' name='btnUsuarioNuevo'>Usuario+</button></form></th>
+            <th> <form action='index.php' method='post'>
+            <button type='submit' name='btnUsuarioNuevo'>Usuario+</button></form></th>
           
         </tr>";
     foreach ($resultado as $tupla) {
@@ -31,20 +32,26 @@ try {
                         <img class='perfil' src='Img/" . $tupla["foto"] . "' alt='Foto de perfil' title='Imagen identificativa del usuario'/>
                         </td>
                         <td>
-                        <form action='index.php' method='post'>
-                        <button type='submit' name='boton_listar' value='" . $tupla["id_usuario"] . "'>
-                            " . $tupla["nombre"] . "
-                        </button>
-                    </form>   
+                            <form action='index.php' method='post'>
+                                <button type='submit' name='btnListarUsuario' value='" . $tupla["id_usuario"] . "'>".$tupla["nombre"]."</button>
+
+                                </form>   
                         </td>
-                        <td>  <form action='index.php' method='post'>
-                        <button type='submit' name='boton_borrar' value='" . $tupla["id_usuario"] . "'>
-                       Borrar </button>
-                    </form> -  <form action='index.php' method='post'>
-                    <button type='submit' name='boton_editar' value='" . $tupla["id_usuario"] . "'>
-       Editar
-                    </button>
-                </form></td>
+
+                        <td>  
+                            <form action='index.php' method='post'>
+                                <button type='submit' name='btnBorrar' value='" . $tupla["id_usuario"] . "'>Borrar</button>
+                                <input type='hidden' name='foto' value='" . $tupla["foto"] . "'>
+
+                            </form> 
+                    - 
+                        
+                            <form action='index.php' method='post'>
+                                <button type='submit' name='btnEditar' value='" . $tupla["id_usuario"] . "'>
+                                          Editar
+                                </button>
+                             </form>
+                    </td>
                     </tr>";
     }
 
