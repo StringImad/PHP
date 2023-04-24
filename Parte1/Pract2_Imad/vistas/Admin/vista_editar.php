@@ -1,10 +1,12 @@
 <?php
+if(isset($_POST["btnEditar"]) || isset($_POST["borrar_foto"])){
 
-if (isset($_POST["boton_editar"])) {
+}
+if (isset($_POST["btnEditar"])) {
 
 
     try {
-        $id_usuario = $_POST["boton_editar"];
+        $id_usuario = $_POST["btnEditar"];
         $consulta = "SELECT * FROM usuarios WHERE id_usuario = ?";
         $sentencia = $conexion->prepare($consulta);
 
@@ -12,13 +14,18 @@ if (isset($_POST["boton_editar"])) {
 
 
         if ($sentencia->rowCount() > 0) {
-            $tupla = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
+            $tupla = $sentencia->fetch(PDO::FETCH_ASSOC);
+            $subs=0;
+            if(isset($_POST["subcripcion"]))
+                $subs=1;
             $nombre = $tupla["nombre"];
             $usuario = $tupla["usuario"];
             $dni = $tupla["dni"];
+            $foto = $tupla["foto"];
+            $subs = $subs;
+            $sexo = $tupla["sexo"];
         } else {
-            $error_usuario = true;
+            $error_consistencia = true;
             $sentencia = null;
             $conexion = null;
         }
@@ -30,24 +37,32 @@ if (isset($_POST["boton_editar"])) {
     }
 } else {
 
-    $id_usuario = $_POST["boton_confirma_editar"];
+    $id_usuario = $_POST["id_usuario"];
     $nombre = $_POST["nombre"];
     $usuario = $_POST["usuario"];
     $dni = $_POST["dni"];
+    $subs = 0;
+    if (isset($_POST["subcripcion"]))
+        $subs = 1;
+
+    $sexo = $_POST["sexo"];
+    $foto_ant = $_POST["foto_bd"];
 }
+
+
 
 echo "<h2 class='centrar'>Editar Usuario " . $id_usuario . "</h2>";
 
 if (isset($error_consistencia)) {
 
     echo "<div class='centrar'>";
-    echo "<p>" . $error_consistencia . "</p>";
+    echo "<p>El usuario no se encuentra registrado</p>";
     echo "<form action='index.php' method='post'>";
     echo "<button type='submit'>Volver</button>";
     echo "</form>";
 } else {
-
-    ?>
+   
+?>
 
     <form action="index.php" method="post" class="centrar">
         <p>
@@ -77,9 +92,8 @@ if (isset($error_consistencia)) {
 
         <p>
             <label for="dni">DNI:</label><br />
-            <input type="text" id="dni" name="dni" placeholder="DNI: 11223344Z"
-                value="<?php if (isset($_POST["dni"]))
-                    echo $_POST["dni"]; ?>" />
+            <input type="text" id="dni" name="dni" placeholder="DNI: 11223344Z" value="<?php if (isset($_POST["dni"]))
+                                                                                            echo $_POST["dni"]; ?>" />
             <?php
             if (isset($_POST["btnContRegistro"]) && $error_dni)
                 if ($_POST["dni"] == "")
@@ -92,14 +106,61 @@ if (isset($error_consistencia)) {
                     echo "<span class='error'> DNI repetido </span>";
             ?>
         </p>
+        <p>
+        <label>Sexo:</label>
+        <?php
+        if(isset($_POST["btnContRegistro"])&&$error_sexo)
+            echo "<span class='error'> Debes seleccionar un sexo </span>";
+        ?>
+        <br/>
+        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="hombre") echo "checked";?> name="sexo" id="hombre" value="hombre"/> <label for="hombre">Hombre</label><br/>
+        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="mujer") echo "checked";?> name="sexo" id="mujer" value="mujer"/> <label for="mujer">Mujer</label>
+
+    </p>
+    <p>
+        <label for="foto">Incluir mi foto (Máx 500 KB):</label><input type="file" id="foto" name="foto" accept="image/*"/>
+        <?php
+        if(isset($_POST["btnContRegistro"])&&$error_foto)
+        {
+            if($_FILES["foto"]["error"])
+            {
+                echo "<span class='error'> Error en la subida del fichero al servidor </span>";
+            }
+            elseif(!getimagesize($_FILES["foto"]["tmp_name"]))
+            {
+                echo "<span class='error'> Error, no has seleccionado un archivo imagen </span>";
+            }
+            else
+                echo "<span class='error'> Error, el tamaño del fichero seleccionado supera los 500KB </span>";
+        }
+        ?>
+    </p>
+    <p>
+        <input type="checkbox" <?php if($subs==1) echo "checked";?>  name="subcripcion" id="sub"/> <label for="sub">Subcribirme al boletín de novedades</label>
+       
+    </p>
 
         <p>
+            <input type="hidden" value="<?php echo $foto_bd;?>" name="foto_bd">
+            <input type="hidden" value="<?php echo $id_usuario;?>" name="id_usuario">
+            <input type="hidden" value="<?php echo $foto_bd;?>" name="foto_bd">
+
             <button type="submit" name="boton_volver">Volver</button>
             <button type="submit" value="<?php echo $id_usuario; ?>" name="boton_confirma_editar">Continuar</button>
         </p>
-    </form>
+        <div>
+        <img src="">
+    </div>
+    <div class='centrado'>
+        <img src="Img/<?php echo $foto_bd;?>" alt="Foto perfil">
+        if($foto_bd!="no_imagen.jpg"){
 
-    <?php
+        }
+    </div>
+    </form>
+    
+
+<?php
 
 
 }

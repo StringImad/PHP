@@ -14,6 +14,8 @@
         echo "<h3>Datos del usuario " . $_POST["btnListarUsuario"] . "</h3>";
         echo "<p><strong>Nombre: </strong>" . $tupla["nombre"] . "</p>";
         echo "<p><strong>Usuario: </strong>" . $tupla["usuario"] . "</p>";
+        echo "<p><strong>Foto: </strong>" . $tupla["foto"] . "</p>";
+
         echo "<form action='index.php' method='post'><button type='submit'>Atrás</button></form>";
     } else { //Si el usuario se borra durante
 
