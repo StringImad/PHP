@@ -202,8 +202,8 @@ if(isset($_POST["btnContRegistro"]))
             echo "<span class='error'> Debes seleccionar un sexo </span>";
         ?>
         <br/>
-        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="Hombre") echo "checked";?> name="sexo" id="hombre" value="Hombre"/> <label for="hombre">Hombre</label><br/>
-        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="Mujer") echo "checked";?> name="sexo" id="mujer" value="Mujer"/> <label for="mujer">Mujer</label>
+        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="hombre") echo "checked";?> name="sexo" id="hombre" value="hombre"/> <label for="hombre">Hombre</label><br/>
+        <input type="radio" <?php if(isset($_POST["sexo"])&& $_POST["sexo"]=="mujer") echo "checked";?> name="sexo" id="mujer" value="mujer"/> <label for="mujer">Mujer</label>
 
     </p>
     <p>

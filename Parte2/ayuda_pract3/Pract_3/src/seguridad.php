@@ -1,5 +1,5 @@
 <?php
-define("MINUTOS", 5);
+define("MINUTOS", 15);
 
 $url=DIR_SERV."/login";
 $datos_env["usuario"]=$_SESSION["usuario"];

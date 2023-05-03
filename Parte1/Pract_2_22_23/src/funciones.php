@@ -38,6 +38,27 @@ function repetido_reg($conexion,$columna, $valor)
     return $respuesta;
 }
 
+function repetido_edit($conexion,$columna, $valor,$columna_clave, $valor_clave)
+{
+    try
+    {
+        $consulta="select * from usuarios where ".$columna."=? and ".$columna_clave."<>?";
+        $sentencia=$conexion->prepare($consulta);
+        $sentencia->execute([$valor,$valor_clave]);
+        $respuesta=$sentencia->rowCount()>0;
+        $sentencia=null;
+      
+    }
+    catch(PDOException $e)
+    {
+        $sentencia=null;
+        $respuesta="Imposible realizar la consulta. Error:".$e->getMessage();
+    }
+  
+ 
+    return $respuesta;
+}
+
 function error_page($title,$cabecera,$mensaje)
 {
     return '<!DOCTYPE html>

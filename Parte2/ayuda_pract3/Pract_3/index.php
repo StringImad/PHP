@@ -3,7 +3,7 @@ session_name("pract3_sw_22_23");
 session_start();
 
 require "src/funciones.php";
-define("DIR_SERV","http://localhost/proyectos/rec/PHP/Parte2/ayuda_pract3/Servicios_Webs/servicios_rest_login");
+define("DIR_SERV","http://localhost/proyectos/PHP/Parte2/ayuda_pract3/Servicios_Webs/servicios_rest_login");
 
 if(isset($_POST["btnSalir"]))
 {

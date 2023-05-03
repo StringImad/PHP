@@ -75,8 +75,8 @@ foreach($usuarios as $tupla)
     echo "<tr>";
     echo "<td>".$tupla["id_usuario"]."</td>";
     echo "<td><img src='Img/".$tupla["foto"]."' alt='foto' title='foto'/></td>";
-    echo "<td>".$tupla["nombre"]."</td>";
-    echo "<td><form action='index.php' method='post'><button class='enlace' name='btnBorrar'>Borrar</button> - <button class='enlace' name='btnEditar'>Editar</button></form></td>";
+    echo "<td><form action='index.php' method='post'><button class='enlace' value='".$tupla["id_usuario"]."' name='btnListar' >".$tupla["nombre"]."</button></form></td>";
+    echo "<td><form action='index.php' method='post'><input type='hidden' name='foto' value='".$tupla["foto"]."'/><button class='enlace' value='".$tupla["id_usuario"]."' name='btnBorrar'>Borrar</button> - <button class='enlace' value='".$tupla["id_usuario"]."' name='btnEditar'>Editar</button></form></td>";
     echo "</tr>";
 }
 

@@ -1,5 +1,5 @@
 <?php
-define("MINUTOS",5);
+define("MINUTOS",15);
 try
 {
     $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));

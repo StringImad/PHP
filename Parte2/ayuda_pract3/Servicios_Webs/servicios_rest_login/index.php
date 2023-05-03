@@ -21,26 +21,29 @@ $app->post('/login',function($request){
 
 //LISTAR usuarios
 
-$app->get('/usuarios', function ($request) {
+$app->get('/obtener_usuarios', function ($request) {
 
-    session_id($request->getParam("api_session"));
-    session_start();
-    if (isset($_SESSION["tipo"]) && $_SESSION["tipo"] == "admin") {
+  
 
         echo json_encode(usuarios());
-    } else {
-        session_destroy();
-        echo json_encode(array("no_login" => "No logueado"));
-    }
+  
 });
-$app->post('/salir', function ($request) {
 
-    session_id($request->getParam("api_session")); //Coge la sesion de la api
-    session_start(); //La inicia
-    session_destroy(); //Para destruirla
-    echo json_encode(array("no_login" => "No logueado"));
+
+$app->get('/obtener_un_usuario/{id}', function($request){
+    $datos[]=$request->getAttribute("id");
+
+    echo json_encode(obtenerUsuario($datos));
+
+
+});
+
+$app->delete('/borrar_usuario', function ($request) {
+    $datos[]=$request->getParam("id_usuario");
+
+  echo json_encode(borrarUsuario($datos));
+
 });
 
 // Una vez creado servicios los pongo a disposición
 $app->run();
-?>
