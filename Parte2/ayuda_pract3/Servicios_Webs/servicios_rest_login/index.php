@@ -38,11 +38,37 @@ $app->get('/obtener_un_usuario/{id}', function($request){
 
 });
 
-$app->delete('/borrar_usuario', function ($request) {
-    $datos[]=$request->getParam("id_usuario");
+$app->delete('/borrar_usuario/{id}', function($request){
+    $datos[]=$request->getAttribute("id");
 
-  echo json_encode(borrarUsuario($datos));
+    echo json_encode(borrarUsuario($datos));
 
+
+});
+
+$app->get('/repetido_reg/{columna}/{valor}',function ($request){
+
+
+    echo json_encode(repetido($request->getAttribute("columna"),$request->getAttribute("valor")));
+});
+
+$app->post('/insertar_usuario',function($request){
+    
+   
+    $datos[0] = $request->getParam("usuario");
+    $datos[1] = $request->getParam("clave");
+    $datos[2] = $request->getParam("nombre");
+    $datos[3] = $request->getParam("dni");
+    $datos[4] = $request->getParam("sexo");
+    $datos[5] = $request->getParam("subs");
+
+    echo json_encode(insertar_usuario($datos));
+
+});
+
+$app->put('/cambiar_foto/{id}',function($request){
+
+    echo json_encode(cambiar_foto($request->getAttribute("id"),$request->getAttribute("foto")));
 });
 
 // Una vez creado servicios los pongo a disposición
