@@ -6,6 +6,14 @@ if(isset($_POST["btnBorrarNuevo"]))
   
 }
 
+if(isset($_POST["btnContBorrarFoto"]))
+{
+    unlink("Img/" . $_POST["foto_bd"]);
+    $_SESSION["borrarFoto"] = $_POST["id_usuario"];
+    header("Location:index.php");
+    exit;
+}
+
 
 if(isset($_POST["btnContNuevo"]))
 {
