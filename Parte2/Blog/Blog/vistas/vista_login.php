@@ -36,6 +36,14 @@ if(isset($_POST["btnLogin"]))
     }
 }
 
+if(isset($_POST["btnRegistro"])){
+    
+$error_usuario = $_POST["usuario"];
+$error_clave = $_POST["clave"] == "";
+$error_email = $_POST["email"] == "";
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -71,7 +79,7 @@ if(isset($_POST["btnLogin"]))
             ?>
         </p>
         <p><button name="btnLogin">Entrar</button></p>
-        <p><button name="btnRegistrarse">Entrar</button></p>
+        <p><button name="btnRegistro">Entrar</button></p>
 
     </form>
     <?php
