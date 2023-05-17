@@ -71,6 +71,8 @@ if(isset($_POST["btnLogin"]))
             ?>
         </p>
         <p><button name="btnLogin">Entrar</button></p>
+        <p><button name="btnRegistrarse">Entrar</button></p>
+
     </form>
     <?php
     if(isset($_SESSION["seguridad"]))
