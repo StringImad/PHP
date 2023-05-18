@@ -43,6 +43,25 @@ $app->post('/login',function($request){
 
 });
 
+$app->get('/obtener_comentarios', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_comentarios());
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->delete('/borrar_comentario/{id}', function ($request) {
+
+    echo json_encode(borrar_comentario($request->getAttribute('id')));
+});
 
 
 // Una vez creado servicios los pongo a disposición

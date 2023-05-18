@@ -29,7 +29,12 @@ if(isset($_POST["btnLogin"]))
             $_SESSION["clave"]=$datos_env["clave"];
             $_SESSION["ultima_accion"]=time();
             $_SESSION["api_session"]["api_session"]=$obj->api_session;
-            header("Location:principal.php");
+            if($obj->usuario->tipo=="admin"){
+                header("Location:admin/gest_comentarios.php");
+            }else{
+                header("Location:principal.php");
+
+            }
             exit;
         }
 

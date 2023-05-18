@@ -82,5 +82,52 @@ function login($datos)
     return $respuesta;
 }
 
+function obtener_comentarios(){
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "SELECT c.*, u.usuario, n.titulo
+            FROM comentarios c
+            JOIN usuarios u ON c.idUsuario = u.idusuario
+            JOIN noticias n ON c.idNoticia = n.idNoticia;";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute();
+
+            $respuesta["comentarios"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+function borrar_comentario($id)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "delete from comentarios where idComentario=?";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute([$id]);
+
+            $respuesta["mensaje"] = "comentario borrado de la BD";
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
 
 ?>
