@@ -12,9 +12,6 @@ if(isset($_SESSION["usuario"]))
 }
 else
 {
-    // if(isset($_POST["btnRegistro"])){
-    //     require "vistas/vista_registro.php";
-    // }
     require "vistas/vista_login.php";
 }
 
