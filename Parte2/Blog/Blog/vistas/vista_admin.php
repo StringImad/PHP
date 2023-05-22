@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST["btnBorrar"]))
+if(isset($_POST["btnContBorrar"]))
 {
     
     $url=DIR_SERV."/borrar_comentario/".$_POST["btnBorrar"];
