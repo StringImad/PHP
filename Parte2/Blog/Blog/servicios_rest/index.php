@@ -98,7 +98,101 @@ $app->get('/usuarios/{columna}/{valor}', function($request){
     session_start();
 
     if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
-        echo json_encode(obtener_usuario($request->getAttribute('columna'), $request->getAttribute('valor')));
+        echo json_encode(obtener_usuarios($request->getAttribute('columna'), $request->getAttribute('valor')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+$app->get('/comentarios/{id_noticia}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_comentarios($request->getAttribute('id_noticia')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->get('/usuario/{id}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_usuario($request->getAttribute('id')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->get('/noticia/{id}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_noticia($request->getAttribute('id')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->get('/categoria/{id}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_categoria($request->getAttribute('id')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->put('/actualizarComentario/{id}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        $datos[]=$request->getParam("estado");
+        $datos[]=$request->getAttribute("id");
+
+
+        echo json_encode(actualizar_comentario($datos));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
+$app->put('/borrarComentario/{id}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+
+        echo json_encode(borrar_comentario($request->getAttribute('id')));
 
     }else{
         session_destroy();

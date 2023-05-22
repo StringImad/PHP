@@ -89,7 +89,7 @@ function obtener_comentarios(){
             $consulta = "SELECT c.*, u.usuario, n.titulo
             FROM comentarios c
             JOIN usuarios u ON c.idUsuario = u.idusuario
-            JOIN noticias n ON c.idNoticia = n.idNoticia;";
+            JOIN noticias n ON c.idNoticia = n.idNoticia order by idComentario;";
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute();
 
@@ -107,28 +107,28 @@ function obtener_comentarios(){
 
     return $respuesta;
 }
-function borrar_comentario($id)
-{
-    try {
-        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-        try {
-            $consulta = "delete from comentarios where idComentario=?";
-            $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute([$id]);
+ function borrar_comentario($id)
+ {
+     try {
+         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+         try {
+             $consulta = "delete from comentarios where idComentario=?";
+             $sentencia = $conexion->prepare($consulta);
+             $sentencia->execute([$id]);
 
-            $respuesta["mensaje"] = "comentario borrado de la BD";
+             $respuesta["mensaje"] = "comentario borrado de la BD";
 
-            $sentencia = null;
-            $conexion = null;
-        } catch (PDOException $e) {
-            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
-        }
-    } catch (PDOException $e) {
-        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
-    }
+             $sentencia = null;
+             $conexion = null;
+         } catch (PDOException $e) {
+             $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+         }
+     } catch (PDOException $e) {
+         $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+     }
 
-    return $respuesta;
-}
+     return $respuesta;
+ }
 
 function insertar_usuario($datos)
 {
@@ -179,25 +179,23 @@ function obtener_comentarios2(){
     return $respuesta;
 }
 
-function obtener_usuario($columna, $valor, $columna_id = null, $valor_id = null)
+function obtener_usuarios($columna, $valor)
 {
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
-            if (isset($columna_id)) {
-                $consulta = "select " . $columna . " from usuarios where " . $columna . "=? AND " . $columna_id . "<>?";
-                $datos_consulta[] = $valor;
-                $datos_consulta[] = $valor_id;
-            } else {
-                $consulta = "select " . $columna . " from usuarios where " . $columna . "=?";
-                $datos_consulta[] = $valor;
-            }
-
+                //falla por las comillas si no lo ponemos así
+                $consulta = "select * from usuarios where " . $columna . "=?";
+              
 
             $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute($datos_consulta);
+            $sentencia->execute($valor);
 
-            $respuesta["repetido"] = $sentencia->rowCount() > 0;
+            if($sentencia->rowCount()>0){
+                $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró el usuario.";
+            }
 
 
             $sentencia = null;
@@ -211,4 +209,188 @@ function obtener_usuario($columna, $valor, $columna_id = null, $valor_id = null)
 
     return $respuesta;
 }
-?>
+
+function obtener_comentario($id)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "select * from comentarios where idNoticia =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($id);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["comentario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró el usuario.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+function obtener_usuario($id)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "select * from usuarios where idusuario =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($id);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró el usuario.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function obtener_noticia($id)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "select * from noticias where idNoticia =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($id);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["noticia"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró la noticia.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function obtener_categoria($id)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "select * from categorias where idCategoria =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($id);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["categoria"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró la categoria.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function actualizar_comentario($datos)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "update comentarios set estado =? idComentario =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["comentario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró la comentario.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function borrar_comentario2($datos)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+                //falla por las comillas si no lo ponemos así
+                $consulta = "delete from comentarios where idComentario =?";
+              
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+            if($sentencia->rowCount()>0){
+                $respuesta["comentario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $respuesta["mensaje"] = "No se encontró la comentario.";
+            }
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
