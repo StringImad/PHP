@@ -43,6 +43,21 @@ $app->post('/login',function($request){
 
 });
 
+$app->get('/comentarios', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_comentarios2());
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+
 $app->get('/obtener_comentarios', function($request){
     session_id($request->getParam("api_session"));
 
@@ -63,6 +78,34 @@ $app->delete('/borrar_comentario/{id}', function ($request) {
     echo json_encode(borrar_comentario($request->getAttribute('id')));
 });
 
+$app->post('/insertarUsaurio', function($request){
+    session_id($request->getParam("api_session"));
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        $datos[]=$request->getParam("usuario");
+        $datos[]=$request->getParam("clave");
+        $datos[]=$request->getParam("email");
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
+$app->get('/usuarios/{columna}/{valor}', function($request){
+    session_id($request->getParam("api_session"));
+
+    session_start();
+
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+        echo json_encode(obtener_usuario($request->getAttribute('columna'), $request->getAttribute('valor')));
+
+    }else{
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+
+});
 
 // Una vez creado servicios los pongo a disposición
 $app->run();

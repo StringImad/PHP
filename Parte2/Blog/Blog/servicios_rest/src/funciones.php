@@ -130,4 +130,85 @@ function borrar_comentario($id)
     return $respuesta;
 }
 
+function insertar_usuario($datos)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "insert into usuarios(usuario, clave, nombre) values(?,?,?)";
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+            $respuesta["mensaje"] ="usuario insertado con exito";
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function obtener_comentarios2(){
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "SELECT *
+            FROM comentarios";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute();
+
+            $respuesta["comentarios"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+
+function obtener_usuario($columna, $valor, $columna_id = null, $valor_id = null)
+{
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            if (isset($columna_id)) {
+                $consulta = "select " . $columna . " from usuarios where " . $columna . "=? AND " . $columna_id . "<>?";
+                $datos_consulta[] = $valor;
+                $datos_consulta[] = $valor_id;
+            } else {
+                $consulta = "select " . $columna . " from usuarios where " . $columna . "=?";
+                $datos_consulta[] = $valor;
+            }
+
+
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos_consulta);
+
+            $respuesta["repetido"] = $sentencia->rowCount() > 0;
+
+
+            $sentencia = null;
+            $conexion = null;
+        } catch (PDOException $e) {
+            $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
+        }
+    } catch (PDOException $e) {
+        $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
 ?>
