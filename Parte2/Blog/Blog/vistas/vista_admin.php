@@ -58,10 +58,11 @@ if(isset($_POST["btnContBorrar"]))
             <button name="btnSalir" class="enlace">Salir</button>
         </form>
     </div>
-    <h2>Todos los comentarios</h2>
 
     <?php
     if(isset($_POST["btnVerNoticia"])){
+
+        require "../vistas/vista_noticia.php";
 
     }else{
         if(isset($_POST["btnBorrar"])){

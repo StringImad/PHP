@@ -138,7 +138,6 @@ $app->get('/usuario/{id}', function($request){
 
 $app->get('/noticia/{id}', function($request){
     session_id($request->getParam("api_session"));
-
     session_start();
 
     if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {

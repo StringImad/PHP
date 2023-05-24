@@ -281,7 +281,7 @@ function obtener_noticia($id)
               
 
             $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute($id);
+            $sentencia->execute([$id]);
 
             if($sentencia->rowCount()>0){
                 $respuesta["noticia"] = $sentencia->fetch(PDO::FETCH_ASSOC);

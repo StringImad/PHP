@@ -29,7 +29,7 @@ foreach ($obj->comentarios as $tupla) {
         echo "<tr>";
         echo "<td>" . $tupla->idComentario . "</td>";
         echo "<td>".$tupla->comentario . "</br> Dijo ".$tupla->usuario." en <form action='gest_comentarios.php' method='post'>
-        <button value='" . $tupla->idNoticia . " class='enlace' name='btnNoticia'>".$tupla->titulo."</button></form></td>";
+        <button value='" . $tupla->idNoticia . " class='enlace' name='btnVerNoticia'>".$tupla->titulo."</button></form></td>";
         echo "<td><form action='gest_comentarios.php' method='post'>";
 
         if ($tupla->estado == "apto") {
