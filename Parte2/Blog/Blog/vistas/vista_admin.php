@@ -1,19 +1,19 @@
 <?php
 if(isset($_POST["btnContBorrar"]))
 {
-    
-    $url=DIR_SERV."/borrar_comentario/".$_POST["btnBorrar"];
+    echo "---------";
+    $url=DIR_SERV."/borrar_comentario/".$_POST["btnContBorrar"];
     $respuesta=consumir_servicios_REST($url,"DELETE");
     $obj=json_decode($respuesta);
     if(!$obj)
     {
         session_destroy();
-        die(error_page("Práctica 3 - SW","Práctica 3 - SW","Error consumiendo el servicio: ".$url));
+        die(error_page("Práctica 4 - SW","Práctica 4 - SW","Error consumiendo el servicio: ".$url));
     }
     if(isset($obj->mensaje_error))
     {
         session_destroy();
-        die(error_page("Práctica 3 - SW","Práctica 3 - SW",$obj->mensaje_error));
+        die(error_page("Práctica 4 - SW","Práctica 4 - SW",$obj->mensaje_error));
     } 
     
    
@@ -66,11 +66,12 @@ if(isset($_POST["btnContBorrar"]))
 
     }else{
         if(isset($_POST["btnBorrar"])){
-
+            require "../vistas/vista_borrar.php";
         }
         if(isset($_POST["btnAprobar"])){
             
         }
+        echo "<h2>Todos los comentarios</h2>";
         require "../vistas/vista_tabla.php";
 
     }

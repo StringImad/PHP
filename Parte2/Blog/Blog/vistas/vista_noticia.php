@@ -1,6 +1,8 @@
 <?php
+$idnoticia = $_POST["btnVerNoticia"];
 
-$url=DIR_SERV."/noticia/".$_POST["btnVerNoticia"];
+
+$url=DIR_SERV."/noticia/".$idnoticia;
 
 // $datos_env["api_session"]=$_SESSION["api_session"];
 
@@ -8,8 +10,6 @@ $url=DIR_SERV."/noticia/".$_POST["btnVerNoticia"];
 $respuesta = consumir_servicios_REST($url, "GET",$_SESSION["api_session"]);
 
 $obj = json_decode($respuesta);
-echo $obj;
-
 if (!$obj) {
     session_destroy();
     die("<p>Error consumiendo el servicio: " . $url . "</p></body></html>");
@@ -29,20 +29,19 @@ if (isset($obj->no_login)) {
     exit;
 }
 if (isset($obj->mensaje)) {
-echo "+++++++++++++";
-}else{echo "<table id='tabla_principal'>";
-echo "<tr>";
-echo "<th>ID</th><th>Comentarios</th><th>Opción</th>";
-echo "</tr>";
-foreach ($obj->noticia as $tupla) {
-        echo "<tr>";
-        echo "<td>" . $tupla->idNoticia . "</td>";
-      
+echo "<form method='post' action='gest_comentarios.php";
+echo "<p>La noticia ya no se encuentra en la BD</p>
+<p><button>Volver</button></p></form>";
+}else{
+    echo "<h2>".$obj->noticia->titulo."</h2>";
+    echo "<p>Publicado por <strong>".$obj->noticia->usuario."</strong> en ".$obj->noticia->valor." el ".$obj->noticia->fPublicacion."</p>";
+    echo "<p>".$obj->noticia->cuerpo."</p>";
+    echo "<h2>Comentarios</h2>";
+        echo "<p>".$obj->noticia->usuario." dijo:</p>";
+        echo "<p>".$obj->noticia->comentario."</p>";
 
-      
-                    echo "</tr>";
-}
-echo "</table>";}
+
+   }
 
 
 ?>

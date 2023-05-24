@@ -16,10 +16,7 @@ if (isset($obj->no_login)) {
     session_destroy();
     die("<p> El tiempo de session de la API ha expirado  vuelve a loguerarse</p></body></html>");
 
-    session_unset();
-    $_SESSION["seguridad"] = "El tiempo de session de la API ha expirado";
-    header("Location:index.php");
-    exit;
+ 
 }
 echo "<table id='tabla_principal'>";
 echo "<tr>";
@@ -28,8 +25,9 @@ echo "</tr>";
 foreach ($obj->comentarios as $tupla) {
         echo "<tr>";
         echo "<td>" . $tupla->idComentario . "</td>";
-        echo "<td>".$tupla->comentario . "</br> Dijo ".$tupla->usuario." en <form action='gest_comentarios.php' method='post'>
-        <button value='" . $tupla->idNoticia . " class='enlace' name='btnVerNoticia'>".$tupla->titulo."</button></form></td>";
+        echo "<td>".$tupla->comentario . "</br> Dijo ".$tupla->usuario." en: 
+        <form class='enlinea' action='gest_comentarios.php' method='post'>
+        <button value='" . $tupla->idNoticia . "' class='enlace' name='btnVerNoticia'>".$tupla->titulo."</button></form></td>";
         echo "<td><form action='gest_comentarios.php' method='post'>";
 
         if ($tupla->estado == "apto") {

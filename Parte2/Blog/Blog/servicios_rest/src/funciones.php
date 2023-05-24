@@ -86,6 +86,8 @@ function obtener_comentarios(){
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
+            // $consulta="select comentarios.*, usuarios.usuario, noticias.titulo from comentarios, usuarios, noticias where comentarios.idUsuario=usuarios.idusuario and comentarios.idNoticia=noticias.idNoticia order by comentarios.idComentario";
+
             $consulta = "SELECT c.*, u.usuario, n.titulo
             FROM comentarios c
             JOIN usuarios u ON c.idUsuario = u.idusuario
@@ -277,8 +279,13 @@ function obtener_noticia($id)
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
                 //falla por las comillas si no lo ponemos así
-                $consulta = "select * from noticias where idNoticia =?";
-              
+                // $consulta = "select * from noticias where idNoticia =?;";
+                $consulta = "SELECT n.*, u.usuario, c.comentario, ca.valor
+            FROM noticias n
+            JOIN categorias ca ON ca.idCategoria = n.idCategoria
+            JOIN usuarios u ON n.idUsuario = u.idusuario
+            JOIN comentarios c ON c.idNoticia = n.idNoticia order by idComentario;";
+          
 
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute([$id]);
