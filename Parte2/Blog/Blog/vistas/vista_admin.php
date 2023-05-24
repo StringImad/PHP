@@ -1,7 +1,6 @@
 <?php
 if(isset($_POST["btnContBorrar"]))
 {
-    echo "---------";
     $url=DIR_SERV."/borrar_comentario/".$_POST["btnContBorrar"];
     $respuesta=consumir_servicios_REST($url,"DELETE");
     $obj=json_decode($respuesta);
@@ -21,8 +20,62 @@ if(isset($_POST["btnContBorrar"]))
     $_SESSION["accion"]="El comentario ha sido borrado con éxito";
    
 }
+if(isset($_POST['btnEnviarComentario'])){
+    echo "------1-----";
+
+    $url = DIR_SERV . "/insertarComentario/".$_POST['btnEnviarComentario'];
+    $datos['comentario'] = $_POST['comentario'];
+    $datos['idUsuario'] = $_SESSION['usuario'];
+    $datos['api_session'] = $_SESSION['api_session']["api_session"];
+    $respuesta = consumir_servicios_REST($url, "POST", $datos);
+    $obj = json_decode($respuesta);
+
+    if (!$obj) {
+        session_destroy();
+        die("<p>Error consumiendo el servicio: " . $url . "</p></body></html>");
+    }
+    if (isset($obj->mensaje_error)) {
+        session_destroy();
+        die("<p>" . $obj->mensaje_error . "</p></body></html>");
+    }
+
+    if (isset($obj->no_login)) {
+        session_destroy();
+        die("<p> El tiempo de session de la API ha expirado  vuelve a loguerarse</p></body></html>");
 
 
+    }
+
+    
+    $_SESSION["accion"]="El comentario ha sido enviado con éxito";
+    // header("Location:gest_comentarios.php");
+    // exit;
+}
+if(isset($_POST["btnContAprobar"]))
+{
+
+    $url=DIR_SERV."/actualizarComentario/".$_POST["btnContAprobar"];
+    $datos_act["estado"]="apto";
+    $datos_act["api_session"]=$_SESSION["api_session"]["api_session"];
+    $respuesta=consumir_servicios_REST($url,"put",$datos_act);
+    $obj=json_decode($respuesta);
+    if(!$obj)
+    {
+        session_destroy();
+        die(error_page("Práctica 4 - SW","Práctica 4 - SW","Error consumiendo el servicio: ".$url));
+    }
+    if(isset($obj->mensaje_error))
+    {
+        session_destroy();
+        die(error_page("Práctica 4 - SW","Práctica 4 - SW",$obj->mensaje_error));
+    } 
+    
+   
+    
+    $_SESSION["accion"]="El comentario ha sido actualizado con éxito";
+    header("Location:gest_comentarios.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +114,6 @@ if(isset($_POST["btnContBorrar"]))
 
     <?php
     if(isset($_POST["btnVerNoticia"])){
-
         require "../vistas/vista_noticia.php";
 
     }else{
@@ -69,7 +121,8 @@ if(isset($_POST["btnContBorrar"]))
             require "../vistas/vista_borrar.php";
         }
         if(isset($_POST["btnAprobar"])){
-            
+            require "../vistas/vista_aprobar.php";
+
         }
         echo "<h2>Todos los comentarios</h2>";
         require "../vistas/vista_tabla.php";

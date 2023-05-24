@@ -16,26 +16,25 @@ if (isset($obj->no_login)) {
     session_destroy();
     die("<p> El tiempo de session de la API ha expirado  vuelve a loguerarse</p></body></html>");
 
- 
+
 }
 echo "<table id='tabla_principal'>";
 echo "<tr>";
 echo "<th>ID</th><th>Comentarios</th><th>Opción</th>";
 echo "</tr>";
 foreach ($obj->comentarios as $tupla) {
-        echo "<tr>";
-        echo "<td>" . $tupla->idComentario . "</td>";
-        echo "<td>".$tupla->comentario . "</br> Dijo ".$tupla->usuario." en: 
+    echo "<tr>";
+    echo "<td>" . $tupla->idComentario . "</td>";
+    echo "<td>" . $tupla->comentario . "</br> Dijo " . $tupla->usuario . " en: 
         <form class='enlinea' action='gest_comentarios.php' method='post'>
-        <button value='" . $tupla->idNoticia . "' class='enlace' name='btnVerNoticia'>".$tupla->titulo."</button></form></td>";
-        echo "<td><form action='gest_comentarios.php' method='post'>";
+        <button  name='btnVerNoticia' value='" . $tupla->idNoticia . "' class='enlace'>" . $tupla->titulo . "</button></form></td>";
+    echo "<td><form action='gest_comentarios.php' method='post'>";
 
-        if ($tupla->estado == "apto") {
-            echo "<button class='enlace' value='" . $tupla->idComentario . "' name='btnAprobar'>Aprobar</button> - ";
-        }
-        
-        echo "<button class='enlace' value='" . $tupla->idComentario . "' name='btnBorrar'>Borrar</button></form></td>";
-                    echo "</tr>";
+        if ($tupla->estado == "sin validar")
+        echo "<button class='enlace' value='" . $tupla->idComentario . "' name='btnAprobar'>Aprobar</button> - ";
+    echo "<button class='enlace' value='" . $tupla->idComentario . "' name='btnBorrar'>Borrar</button>";
+    echo "</form></td>";
+    echo "</tr>";
 }
 echo "</table>";
 

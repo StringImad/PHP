@@ -112,7 +112,7 @@ $app->get('/comentarios/{id_noticia}', function($request){
     session_start();
 
     if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
-        echo json_encode(obtener_comentarios($request->getAttribute('id_noticia')));
+        echo json_encode(obtener_comentario($request->getAttribute('id_noticia')));
 
     }else{
         session_destroy();
@@ -199,7 +199,24 @@ $app->put('/borrarComentario/{id}', function($request){
     }
 
 });
+$app->post('/insertarComentario/{id_noticia}',function($request){
 
+    session_id($request->getParam('api_session'));
+    session_start();
+echo "---------";
+    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
+    { 
+        $datos[]=$request->getParam("comentario");
+        $datos[]=$request->getParam("idUsuario");
+        $datos[]=$request->getAttribute("id_noticia");
+        echo json_encode(insertar_comentario($datos));
+    }
+    else
+    {
+        session_destroy();
+        echo json_encode(array('no_login'=>'No logueado'));
+    }
+});
 // Una vez creado servicios los pongo a disposición
 $app->run();
 ?>

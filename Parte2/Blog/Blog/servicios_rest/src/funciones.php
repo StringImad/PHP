@@ -218,18 +218,13 @@ function obtener_comentario($id)
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
                 //falla por las comillas si no lo ponemos así
-                $consulta = "select * from comentarios where idNoticia =?";
-              
-
-            $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute($id);
-
-            if($sentencia->rowCount()>0){
-                $respuesta["comentario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
-            }else{
-                $respuesta["mensaje"] = "No se encontró el usuario.";
-            }
-
+                $consulta="select comentarios.*, usuarios.usuario from comentarios, usuarios where comentarios.idUsuario=usuarios.idusuario and idNoticia=?";
+                $sentencia=$conexion->prepare($consulta);
+                $sentencia->execute([$id]);
+    
+                
+                $respuesta["comentarios"]=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+                
 
             $sentencia = null;
             $conexion = null;
@@ -284,7 +279,7 @@ function obtener_noticia($id)
             FROM noticias n
             JOIN categorias ca ON ca.idCategoria = n.idCategoria
             JOIN usuarios u ON n.idUsuario = u.idusuario
-            JOIN comentarios c ON c.idNoticia = n.idNoticia order by idComentario;";
+            JOIN comentarios c ON c.idNoticia = n.idNoticia where n.idNoticia =?;";
           
 
             $sentencia = $conexion->prepare($consulta);
@@ -346,21 +341,17 @@ function actualizar_comentario($datos)
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
                 //falla por las comillas si no lo ponemos así
-                $consulta = "update comentarios set estado =? idComentario =?";
+                $consulta="update comentarios set estado=? where idComentario=?";
+                $sentencia=$conexion->prepare($consulta);
+                $sentencia->execute($datos);
+    
+               
               
-
-            $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute($datos);
-
-            if($sentencia->rowCount()>0){
-                $respuesta["comentario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
-            }else{
-                $respuesta["mensaje"] = "No se encontró la comentario.";
-            }
-
-
-            $sentencia = null;
-            $conexion = null;
+                $respuesta["mensaje"]="El comentario ha sido actualizado correctamente";
+                
+    
+                $sentencia=null;
+                $conexion=null;
         } catch (PDOException $e) {
             $respuesta["mensaje_error"] = "Imposible realizar la consulta. Error:" . $e->getMessage();
         }
@@ -397,6 +388,39 @@ function borrar_comentario2($datos)
         }
     } catch (PDOException $e) {
         $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+function insertar_comentario($datos)
+{
+    try
+    {
+        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
+        try
+        {
+            $consulta="insert into comentarios (comentario, idUsuario, idNoticia) values(?,?,?)";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+           
+          
+            $respuesta["mensaje"]="El comentario ha sido insertado correctamente";
+            
+
+            $sentencia=null;
+            $conexion=null;
+        }
+        catch(PDOException $e)
+        {
+            $respuesta["mensaje_error"]="Imposible realizar la consulta. Error:".$e->getMessage();
+        }
+        
+
+    }
+    catch(PDOException $e)
+    {
+        $respuesta["mensaje_error"]="Imposible conectar a la BD. Error:".$e->getMessage();
     }
 
     return $respuesta;
