@@ -205,9 +205,16 @@ $app->post('/insertarComentario/{id_noticia}',function($request){
     session_start();
     if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
     { 
+
         $datos[]=$request->getParam("comentario");
         $datos[]=$request->getParam("idUsuario");
         $datos[]=$request->getAttribute("id_noticia");
+        if($_SESSION["tipo"]=="admin"){
+            $datos[]="apto";
+        }else{
+            $datos[]="sin validar";
+
+        }
         echo json_encode(insertar_comentario($datos));
     }
     else
