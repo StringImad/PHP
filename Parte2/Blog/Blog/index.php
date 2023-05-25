@@ -10,8 +10,10 @@ if(isset($_SESSION["usuario"]))
     header("Location:principal.php");
     exit();
 }
-else
-{
+elseif($_POST["btnRegistro"] || $_POST["btnConRegistro"]){
+        require "vistas/vista_registro.php";
+
+}else{
     // if(isset($_POST["btnRegistro"])){
     //     require "vistas/vista_registro.php";
     // }

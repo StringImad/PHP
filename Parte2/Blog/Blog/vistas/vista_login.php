@@ -76,6 +76,7 @@ if(isset($_POST["btnLogin"]))
             ?>
         </p>
         <p><button name="btnLogin">Entrar</button></p>
+        <p><button name="btnRegistro">Registrarse</button></p>
 
     </form>
     <?php

@@ -275,11 +275,11 @@ function obtener_noticia($id)
         try {
                 //falla por las comillas si no lo ponemos así
                 // $consulta = "select * from noticias where idNoticia =?;";
-                $consulta = "SELECT n.*, u.usuario, c.comentario, ca.valor
+                $consulta = "SELECT n.*, u.usuario, c.comentario,c.fCreacion, ca.valor
             FROM noticias n
             JOIN categorias ca ON ca.idCategoria = n.idCategoria
             JOIN usuarios u ON n.idUsuario = u.idusuario
-            JOIN comentarios c ON c.idNoticia = n.idNoticia where n.idNoticia =?;";
+            JOIN comentarios c ON c.idNoticia = n.idNoticia where n.idNoticia =? order by c.fCreacion;";
           
 
             $sentencia = $conexion->prepare($consulta);

@@ -6,11 +6,15 @@ if(isset($_POST["btnContBorrar"]))
     $obj=json_decode($respuesta);
     if(!$obj)
     {
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
         session_destroy();
         die(error_page("Práctica 4 - SW","Práctica 4 - SW","Error consumiendo el servicio: ".$url));
     }
     if(isset($obj->mensaje_error))
     {
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
         session_destroy();
         die(error_page("Práctica 4 - SW","Práctica 4 - SW",$obj->mensaje_error));
     } 
@@ -21,25 +25,33 @@ if(isset($_POST["btnContBorrar"]))
    
 }
 if(isset($_POST['btnEnviarComentario'])){
-    echo "------1-----";
 
+    $error_form=$_POST["comentario"]=="";
+    if(!$error_form){
     $url = DIR_SERV . "/insertarComentario/".$_POST['btnEnviarComentario'];
     $datos['comentario'] = $_POST['comentario'];
-    $datos['idUsuario'] = $_SESSION['usuario'];
+    $datos['idUsuario'] = $datos_usu_log->idusuario;
     $datos['api_session'] = $_SESSION['api_session']["api_session"];
-    $respuesta = consumir_servicios_REST($url, "POST", $datos);
+    $respuesta = consumir_servicios_REST($url,"POST", $datos);
     $obj = json_decode($respuesta);
-
+   json_encode($obj);
     if (!$obj) {
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
         session_destroy();
-        die("<p>Error consumiendo el servicio: " . $url . "</p></body></html>");
+        die(error_page("BLOG 4 - SW","Práctica 4 - SW","Error consumiendo el servicio: ".$url));
     }
     if (isset($obj->mensaje_error)) {
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
         session_destroy();
-        die("<p>" . $obj->mensaje_error . "</p></body></html>");
+        
+        die(error_page("Práctica 4 - SW","Práctica 4 - SW",$obj->mensaje_error));
     }
 
     if (isset($obj->no_login)) {
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
         session_destroy();
         die("<p> El tiempo de session de la API ha expirado  vuelve a loguerarse</p></body></html>");
 
@@ -47,7 +59,12 @@ if(isset($_POST['btnEnviarComentario'])){
     }
 
     
-    $_SESSION["accion"]="El comentario ha sido enviado con éxito";
+    $_SESSION["comentario"]=$_POST['btnEnviarComentario'];
+    header("Location:gest_comentarios.php");
+    exit;
+}else{
+
+    }
     // header("Location:gest_comentarios.php");
     // exit;
 }
@@ -113,7 +130,8 @@ if(isset($_POST["btnContAprobar"]))
     </div>
 
     <?php
-    if(isset($_POST["btnVerNoticia"])){
+    if(isset($_POST["btnVerNoticia"])||isset($_POST["btnEnviarComentario"])|| isset($_SESSION["comentario"])){
+  
         require "../vistas/vista_noticia.php";
 
     }else{

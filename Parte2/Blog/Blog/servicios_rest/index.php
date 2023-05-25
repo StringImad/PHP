@@ -203,7 +203,6 @@ $app->post('/insertarComentario/{id_noticia}',function($request){
 
     session_id($request->getParam('api_session'));
     session_start();
-echo "---------";
     if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
     { 
         $datos[]=$request->getParam("comentario");

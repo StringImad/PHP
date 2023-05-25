@@ -6,17 +6,23 @@ $respuesta=consumir_servicios_REST($url,"POST",$_SESSION["api_session"]);
 $obj=json_decode($respuesta);
 if(!$obj)
 {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
     die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
 }
 if(isset($obj->mensaje_error))
 {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
     die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
 }
 
 if(isset($obj->no_login))
 {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_unset();
     $_SESSION["seguridad"]="El tiempo de sesión de la API ha expirado";
     header("Location:".$salto);

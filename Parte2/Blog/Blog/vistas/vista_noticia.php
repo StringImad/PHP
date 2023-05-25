@@ -1,6 +1,12 @@
 <?php
-$idnoticia = $_POST["btnVerNoticia"];
+if(isset($_POST["btnVerNoticia"])){
+    $idnoticia = $_POST["btnVerNoticia"];
+}elseif(isset($_POST["btnEnviarComentario"])){
+    $idnoticia = $_POST["btnEnviarComentario"];
+}else{
+    $idnoticia = $_SESSION["comentario"];
 
+}
 
 
 
@@ -13,15 +19,22 @@ $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
 
 $obj = json_decode($respuesta);
 if (!$obj) {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
+    
     die("<p>Error consumiendo el servicio: " . $url . "</p></body></html>");
 }
 if (isset($obj->mensaje_error)) {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
     die("<p>" . $obj->mensaje_error . "</p></body></html>");
 }
 
 if (isset($obj->no_login)) {
+    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
     die("<p> El tiempo de session de la API ha expirado  vuelve a loguerarse</p></body></html>");
 
@@ -60,7 +73,7 @@ if (isset($obj->mensaje)) {
 
     }
     foreach ($obj->comentarios as $tupla) {
-        echo "<p>" . $tupla->usuario . " Dijo:</p>";
+        echo "<p><strong>" . $tupla->usuario . "</strong> Dijo:</p>";
         echo "<p>" . $tupla->comentario . "</p>";
     }
 
@@ -68,12 +81,19 @@ if (isset($obj->mensaje)) {
     echo "<p><label for='comentario'>";
 
     echo "Dejar un comentario</label></p>";
-    echo "<textarea type='text' name='comentario' id='comentario' value='" . (isset($_POST['comentario']) ? $_POST['comentario'] : '') . "'></textarea>";
-   echo "<button type='submit' name='btnVolver'>Volver</button>";
-   echo "<button type='submit' name='btnEnviarComentario' value='".$idnoticia."'>Enviar</button>";
-
+    echo "<textarea  cols='40' rows='8' name='comentario' id='comentario' ></textarea>";
+    if(isset($_POST["btnEnviarComentario"]) && $error_form){
+        echo "<p>Campo vacio</p>";
+    }
+   echo "<p><button type='submit' name='btnVolver'>Volver</button>";
+   echo "<button type='submit' name='btnEnviarComentario' value='".$idnoticia."'>Enviar</button></p>";
+    echo "<input type='hidden' name='idUsuario' value='".$datos_usu_log->idusuario."'>";
     echo "</form>";
 
+    if(isset($_SESSION["comentartio"])){
+        echo "<p class='mensaje'>El comenatario se ha realizado con éxito</p>";
+        unset($_SESSION["comentario"]);
+    }
 
 }
 
