@@ -75,8 +75,8 @@ if(isset($_POST["btnLogin"]))
                 echo "<span class='error'>Campo Vacío</span>";
             ?>
         </p>
-        <p><button name="btnLogin">Entrar</button></p>
-        <p><button name="btnRegistro">Registrarse</button></p>
+        <p><button name="btnLogin">Entrar</button>
+        <button name="btnRegistro">Registrarse</button></p>
 
     </form>
     <?php

@@ -18,5 +18,8 @@
             <button name="btnSalir" class="enlace">Salir</button>
         </form>
     </div>
+    <?php
+        require "vistas/vista_todas_las_noticias.php";
+    ?>
 </body>
 </html>

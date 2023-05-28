@@ -10,7 +10,8 @@ if(isset($_SESSION["usuario"]))
     header("Location:principal.php");
     exit();
 }
-elseif($_POST["btnRegistro"] || $_POST["btnConRegistro"]){
+elseif(isset($_POST["btnRegistro"]) || isset($_POST["btnContRegistro"])){
+    echo "ha pulsado en btnRegistro o btnContRegistro ";
         require "vistas/vista_registro.php";
 
 }else{
