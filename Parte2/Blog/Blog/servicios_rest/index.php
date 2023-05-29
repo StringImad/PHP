@@ -80,7 +80,6 @@ $app->delete('/borrar_comentario/{id}', function ($request) {
 
 $app->post('/insertarUsuario', function($request){
  
-
         $datos[]=$request->getParam("usuario");
         $datos[]=$request->getParam("clave");
         $datos[]=$request->getParam("email");
@@ -90,17 +89,10 @@ $app->post('/insertarUsuario', function($request){
 
 });
 $app->get('/usuarios/{columna}/{valor}', function($request){
-    session_id($request->getParam("api_session"));
-
-    session_start();
-
-    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
+  
         echo json_encode(obtener_usuarios($request->getAttribute('columna'), $request->getAttribute('valor')));
 
-    }else{
-        session_destroy();
-        echo json_encode(array('no_login'=>'No logueado'));
-    }
+  
 
 });
 $app->get('/comentarios/{id_noticia}', function($request){

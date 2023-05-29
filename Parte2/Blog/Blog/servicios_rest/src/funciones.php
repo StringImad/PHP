@@ -117,7 +117,7 @@ function borrar_comentario($id)
     return $respuesta;
 }
 
-function insertar_usuario($datos)
+function insertar_usuario2($datos)
 {
     echo "....--...";
     try {
@@ -129,7 +129,6 @@ function insertar_usuario($datos)
             $sentencia->execute($datos);
 
             $respuesta["mensaje"] = "usuario insertado con exito";
-            echo $respuesta["mensaje"];
 
             $sentencia = null;
             $conexion = null;
@@ -138,6 +137,36 @@ function insertar_usuario($datos)
         }
     } catch (PDOException $e) {
         $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+function insertar_usuario($datos)
+{
+    try
+    {
+        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
+        try
+        {
+            $consulta="insert into usuarios (usuario, clave, email) values(?,?,?)";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+            $respuesta["mensaje"]="Usuario registrado correctamente en BD";
+
+            $sentencia=null;
+            $conexion=null;
+        }
+        catch(PDOException $e)
+        {
+            $respuesta["mensaje_error"]="Imposible realizar la consulta. Error:".$e->getMessage();
+        }
+        
+
+    }
+    catch(PDOException $e)
+    {
+        $respuesta["mensaje_error"]="Imposible conectar a la BD. Error:".$e->getMessage();
     }
 
     return $respuesta;
@@ -168,7 +197,7 @@ function obtener_comentarios2()
     return $respuesta;
 }
 
-function obtener_usuarios($columna, $valor)
+function obtener_usuarios2($columna, $valor)
 {
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
@@ -194,6 +223,39 @@ function obtener_usuarios($columna, $valor)
         }
     } catch (PDOException $e) {
         $respuesta["mensaje_error"] = "Imposible conectar a la BD. Error:" . $e->getMessage();
+    }
+
+    return $respuesta;
+}
+function obtener_usuarios($columna,$valor)
+{
+    try
+    {
+        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
+        try
+        {
+            $consulta="select * from usuarios where ".$columna."=?";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute([$valor]);
+
+            if($sentencia->rowCount()>0)
+                $respuesta["usuarios"]=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+            else
+                $respuesta["mensaje"]="No existe un usuario con ".$columna."=".$valor;
+
+            $sentencia=null;
+            $conexion=null;
+        }
+        catch(PDOException $e)
+        {
+            $respuesta["mensaje_error"]="Imposible realizar la consulta. Error:".$e->getMessage();
+        }
+        
+
+    }
+    catch(PDOException $e)
+    {
+        $respuesta["mensaje_error"]="Imposible conectar a la BD. Error:".$e->getMessage();
     }
 
     return $respuesta;
@@ -414,11 +476,8 @@ function obtener_noticias()
         try {
             //falla por las comillas si no lo ponemos así
             // $consulta = "select * from noticias where idNoticia =?;";
-            $consulta = "SELECT  n.*, u.usuario, c.comentario,c.fCreacion, ca.valor
-            FROM noticias n
-            JOIN categorias ca ON ca.idCategoria = n.idCategoria
-            JOIN usuarios u ON n.idUsuario = u.idusuario
-            JOIN comentarios c ON c.idNoticia = n.idNoticia order by n.fCreacion";
+            $consulta = "SELECT  n.*
+            FROM noticias n order by n.fCreacion";
 
 
             $sentencia = $conexion->prepare($consulta);

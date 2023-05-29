@@ -85,6 +85,11 @@ if(isset($_POST["btnLogin"]))
         echo "<p class='mensaje'>".$_SESSION["seguridad"]."</p>";
         unset($_SESSION["seguridad"]);
     }
-    ?>
+
+    if (isset($_POST["btnVerNoticia"])) {
+        require "vistas/vista_ver_noticia.php";
+    } else {
+        require "vistas/vista_todas_las_noticias.php";
+    }    ?>
 </body>
 </html>
