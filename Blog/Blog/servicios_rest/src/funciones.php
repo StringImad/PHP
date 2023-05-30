@@ -441,7 +441,7 @@ function insertar_comentario($datos)
 
            
           
-            $respuesta["mensaje"]="El comentario ha sido insertado correctamente";
+            $respuesta["mensaje"]="El comentario ha sido insertado correctamente-+-";
             
 
             $sentencia=null;

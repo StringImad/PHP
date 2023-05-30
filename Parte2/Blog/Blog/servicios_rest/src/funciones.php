@@ -446,7 +446,8 @@ function insertar_comentario($datos)
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
-            $consulta = "insert into comentarios (comentario, idUsuario, idNoticia,estado) values(?,?,?,?)";
+            // $consulta = "insert into comentarios (comentario, idUsuario, idNoticia,estado) values(?,?,?,?)";
+            $consulta="insert into comentarios (comentario, idUsuario, idNoticia) values(?,?,?)";
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute($datos);
 
