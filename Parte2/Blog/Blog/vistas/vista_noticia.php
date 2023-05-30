@@ -87,11 +87,10 @@ if (isset($obj->mensaje)) {
     }
    echo "<p><button type='submit' name='btnVolver'>Volver</button>";
    echo "<button type='submit' name='btnEnviarComentario' value='".$idnoticia."'>Enviar</button></p>";
-    echo "<input type='hidden' name='idUsuario' value='".$datos_usu_log->idusuario."'>";
     echo "</form>";
 
-    if(isset($_SESSION["comentartio"])){
-        echo "<p class='mensaje'>El comenatario se ha realizado con éxito</p>";
+    if(isset($_SESSION["comentario"])){
+        echo "<p class='mensaje'>El comentario se ha realizado con éxito</p>";
         unset($_SESSION["comentario"]);
     }
 
