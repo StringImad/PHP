@@ -64,7 +64,6 @@ $app->get('/obtenerNoticias',function(){
 
     echo json_encode(obtener_noticias());
 
-
 });
 
 $app->get('/comentarios',function($request){

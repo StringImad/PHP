@@ -469,7 +469,9 @@ function obtener_noticias()
         $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
         try
         {
-            $consulta="SELECT idNoticia,titulo,copete FROM noticias WHERE fPublicacion<=NOW() order by fPublicacion DESC"; 
+            $consulta="select noticias.*, usuarios.usuario, categorias.valor from noticias, usuarios, categorias where noticias.idUsuario=usuarios.idusuario and noticias.idCategoria=categorias.idCategoria and fPublicacion<=NOW() order by fPublicacion DESC";
+
+            // $consulta="SELECT idNoticia,titulo,copete FROM noticias WHERE fPublicacion<=NOW() order by fPublicacion DESC"; 
             $sentencia=$conexion->prepare($consulta);
             $sentencia->execute();
 

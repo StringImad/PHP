@@ -101,7 +101,47 @@ if(isset($_POST["btnCrearComentario"]))
 
     }
 }
+if(isset($_POST["btnCrearNoticia"]))
+{
+    $error_form=$_POST["titulo"]=="";
+    $error_form=$_POST["copete"]=="";
+    $error_form=$_POST["cuerpo"]=="";
 
+    if(!$error_form)
+    {
+        $url=DIR_SERV."/insertarNoticia/".$_POST["btnCrearNoticia"];
+        $datos_env["noticia"]=$_POST["noticia"];
+        $datos_env["idUsuario"]=$datos_usu_log->idusuario;
+        $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
+        $respuesta=consumir_servicios_REST($url,"POST",$datos_env);
+        $obj=json_decode($respuesta);
+        if(!$obj)
+        {
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+            session_destroy();
+            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+        }
+        if(isset($obj->mensaje_error))
+        {
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+            session_destroy();
+            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+        }
+
+        if(isset($obj->no_login))
+        {
+            session_unset();
+            $_SESSION["seguridad"]="El tiempo de sesión de la API ha expirado";
+            header("Location:../index.php");
+            exit;
+        }
+
+        $_SESSION["Noticia"]=$_POST["btnCrearNoticia"];
+        header("Location:gest_comentarios.php");
+        exit;
+
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -126,7 +166,7 @@ if(isset($_POST["btnCrearComentario"]))
         <form class="enlinea" action="gest_comentarios.php" method="post"> 
             <button name="btnSalir" class="enlace">Salir</button>
         </form>
-    </div>
+    </div> 
 
     <?php
         if(isset($_POST["btnVerNoticia"]) || isset($_POST["btnCrearComentario"]) || isset($_SESSION["comentario"]))
@@ -136,6 +176,28 @@ if(isset($_POST["btnCrearComentario"]))
         }
         else
         {
+            if(isset($_POST["btnCrearNoticia"]))
+            {
+                echo "<h2>Crear Moticia</h2>";
+                require "../vistas/vista_crear_noticia.php";
+            
+            }
+            if(isset($_POST["btnBorrar"]))
+            {
+                echo "<h2>borrar Moticia</h2>";
+
+                require "../vistas/vista_conf_borrar_noticia.php";
+            
+            }
+
+            if(isset($_POST["btnEditarNoticia"]))
+            {
+                echo "<h2>Editar Moticia</h2>";
+
+                require "../vistas/vista_conf_editar_noticia.php";
+            }
+            require "../vistas/vista_tabla_noticias.php";
+
             if(isset($_POST["btnBorrar"]))
             {
                 require "../vistas/vista_conf_borrar.php";
