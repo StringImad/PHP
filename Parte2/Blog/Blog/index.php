@@ -11,7 +11,6 @@ if(isset($_SESSION["usuario"]))
     exit();
 }
 elseif(isset($_POST["btnRegistro"]) || isset($_POST["btnContRegistro"])){
-    echo "ha pulsado en btnRegistro o btnContRegistro ";
         require "vistas/vista_registro.php";
 
 }else{
@@ -19,6 +18,7 @@ elseif(isset($_POST["btnRegistro"]) || isset($_POST["btnContRegistro"])){
     //     require "vistas/vista_registro.php";
     // }
     require "vistas/vista_login.php";
+   
 }
 
 ?>

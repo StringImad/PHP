@@ -324,11 +324,11 @@ function obtener_noticia($id)
         try {
             //falla por las comillas si no lo ponemos así
             // $consulta = "select * from noticias where idNoticia =?;";
-            $consulta = "SELECT n.*, u.usuario, c.comentario,c.fCreacion, ca.valor
+            $consulta = "SELECT n.*, u.usuario, ca.valor
             FROM noticias n
             JOIN categorias ca ON ca.idCategoria = n.idCategoria
             JOIN usuarios u ON n.idUsuario = u.idusuario
-            JOIN comentarios c ON c.idNoticia = n.idNoticia where n.idNoticia =? order by c.fCreacion;";
+             where n.idNoticia =?;";
 
 
             $sentencia = $conexion->prepare($consulta);
@@ -477,8 +477,8 @@ function obtener_noticias()
         try {
             //falla por las comillas si no lo ponemos así
             // $consulta = "select * from noticias where idNoticia =?;";
-            $consulta = "SELECT  n.*
-            FROM noticias n order by n.fCreacion";
+            $consulta = "SELECT  n.idNoticia, n.titulo, n.copete, n.fCreacion 
+            FROM noticias n where n.fPublicacion <= now() order by  n.fCreacion desc";
 
 
             $sentencia = $conexion->prepare($consulta);

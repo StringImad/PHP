@@ -126,16 +126,16 @@ $app->get('/usuario/{id}', function($request){
 });
 
 $app->get('/noticia/{id}', function($request){
-    session_id($request->getParam("api_session"));
-    session_start();
+    // session_id($request->getParam("api_session"));
+    // session_start();
 
-    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
-        echo json_encode(obtener_noticia($request->getAttribute('id')));
+    // if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin") {
 
-    }else{
-        session_destroy();
-        echo json_encode(array('no_login'=>'No logueado'));
-    }
+    // }else{
+    //     session_destroy();
+    //     echo json_encode(array('no_login'=>'No logueado'));
+    // }
+    echo json_encode(obtener_noticia($request->getAttribute('id')));
 
 });
 
@@ -192,7 +192,7 @@ $app->post('/insertarComentario/{id_noticia}',function($request){
 
     session_id($request->getParam('api_session'));
     session_start();
-    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
+    if(isset($_SESSION["tipo"]))
     { 
 
         $datos[]=$request->getParam("comentario");
