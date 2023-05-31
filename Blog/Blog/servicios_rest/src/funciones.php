@@ -441,7 +441,7 @@ function insertar_comentario($datos)
 
            
           
-            $respuesta["mensaje"]="El comentario ha sido insertado correctamente-+-";
+            $respuesta["mensaje"]="El comentario ha sido insertado correctamente";
             
 
             $sentencia=null;
@@ -461,4 +461,39 @@ function insertar_comentario($datos)
 
     return $respuesta;
 }
+
+function obtener_noticias()
+{
+    try
+    {
+        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
+        try
+        {
+            $consulta="SELECT idNoticia,titulo,copete FROM noticias WHERE fPublicacion<=NOW() order by fPublicacion DESC"; 
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute();
+
+           
+          
+            $respuesta["noticias"]=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+            
+
+            $sentencia=null;
+            $conexion=null;
+        }
+        catch(PDOException $e)
+        {
+            $respuesta["mensaje_error"]="Imposible realizar la consulta. Error:".$e->getMessage();
+        }
+        
+
+    }
+    catch(PDOException $e)
+    {
+        $respuesta["mensaje_error"]="Imposible conectar a la BD. Error:".$e->getMessage();
+    }
+
+    return $respuesta;
+}
+
 ?>

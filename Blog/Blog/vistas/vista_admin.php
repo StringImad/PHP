@@ -1,8 +1,6 @@
 <?php
 if(isset($_POST["btnContBorrar"]))
 {
-    echo $_POST["btnCrearComentario"]."aaaaaaaaaa";
-
     $url=DIR_SERV."/borrarComentario/".$_POST["btnContBorrar"];
     $respuesta=consumir_servicios_REST($url,"DELETE",$_SESSION["api_session"]);
     $obj=json_decode($respuesta);
@@ -33,8 +31,6 @@ if(isset($_POST["btnContBorrar"]))
 
 if(isset($_POST["btnContAprobar"]))
 {
-    echo $_POST["btnCrearComentario"]."aaaaaaaaaa";
-
     $url=DIR_SERV."/actualizarComentario/".$_POST["btnContAprobar"];
     $datos_act["estado"]="apto";
     $datos_act["api_session"]=$_SESSION["api_session"]["api_session"];
@@ -69,14 +65,10 @@ if(isset($_POST["btnContAprobar"]))
 
 if(isset($_POST["btnCrearComentario"]))
 {
-    echo $_POST["btnCrearComentario"]."aaaaaaaaaa";
-
-    echo "....-------....--";
     $error_form=$_POST["comentario"]=="";
     if(!$error_form)
     {
         $url=DIR_SERV."/insertarComentario/".$_POST["btnCrearComentario"];
-        echo $url;
         $datos_env["comentario"]=$_POST["comentario"];
         $datos_env["idUsuario"]=$datos_usu_log->idusuario;
         $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
@@ -137,10 +129,8 @@ if(isset($_POST["btnCrearComentario"]))
     </div>
 
     <?php
-
         if(isset($_POST["btnVerNoticia"]) || isset($_POST["btnCrearComentario"]) || isset($_SESSION["comentario"]))
         {
-
             require "../vistas/vista_ver_noticia.php";
 
         }

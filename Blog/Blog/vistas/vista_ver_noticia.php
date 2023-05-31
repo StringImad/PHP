@@ -8,27 +8,25 @@ else
 
 
 $url=DIR_SERV."/noticia/".$id_noticia;
-$respuesta=consumir_servicios_REST($url,"GET",$_SESSION["api_session"]);
+$respuesta=consumir_servicios_REST($url,"GET");
 $obj=json_decode($respuesta);
 if(!$obj)
 {
-    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+    if(isset($_SESSION["usuario"]))
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+
     session_destroy();
     die("<p>Error consumiendo el servicio: ".$url."</p></body></html>");
 }
 if(isset($obj->mensaje_error))
 {
-    consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+    if(isset($_SESSION["usuario"]))
+        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
     session_destroy();
     die("<p>".$obj->mensaje_error."</p></body></html>");
 }
 
-if(isset($obj->no_login))
-{
-    session_destroy();
-    die("<p>El tiempo de sesión de la API ha expirado. Vuelva a <a href='index.php'>loguearse</a>.</p></body></html>");
-    
-}
+
 
 if(isset($obj->mensaje))
 {
@@ -46,48 +44,55 @@ else
 
     echo "<h2>Comentarios</h2>";
     $url=DIR_SERV."/comentarios/".$id_noticia;
-    $respuesta=consumir_servicios_REST($url,"GET",$_SESSION["api_session"]);
+    $respuesta=consumir_servicios_REST($url,"GET");
     $obj=json_decode($respuesta);
     if(!$obj)
     {
-        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+        if(isset($_SESSION["usuario"]))
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
         session_destroy();
         die("<p>Error consumiendo el servicio: ".$url."</p></body></html>");
     }
     if(isset($obj->mensaje_error))
     {
-        consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+        if(isset($_SESSION["usuario"]))
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
         session_destroy();
         die("<p>".$obj->mensaje_error."</p></body></html>");
     }
 
-    if(isset($obj->no_login))
-    {
-        session_destroy();
-        die("<p>El tiempo de sesión de la API ha expirado. Vuelva a <a href='index.php'>loguearse</a>.</p></body></html>");
-        
-    }
+    
     foreach($obj->comentarios as $tupla)
     {
-        echo "<p><strong>".$tupla->usuario."</strong> dijo:<br/>".$tupla->comentario."</p>"; 
+        if($tupla->estado=="apto" || (isset($datos_usu_log) && $datos_usu_log->tipo=="admin"))
+            echo "<p><strong>".$tupla->usuario."</strong> dijo:<br/>".$tupla->comentario."</p>"; 
     }
 
+
     //Aquí iría el formulario para insertar el comentario
-    echo "<form action='gest_comentarios.php' method='post'>";
+    echo "<form  method='post'>";
     echo "<p>";
     echo "<label for='comentario'>Dejar un comentario:</label><br/>";
-    echo "<textarea cols='40' rows='8' name='comentario' id='comentario'></textarea>";
+    echo "<textarea cols='40' rows='8' name='comentario' id='comentario'>";
+    if(!isset($_SESSION["usuario"]))
+        echo "Debe estar usted logueado para escribir un comentario";
+    echo "</textarea>";
     if(isset($_POST["btnCrearComentario"])&& $error_form)
         echo "<span class='error'>* Campo vacío *</span>";
     echo "</p>";
     echo "<p>";
-    echo "<button>Volver</button> <button value='".$id_noticia."' name='btnCrearComentario'>Enviar</button>";
+    echo "<button>Volver</button>";
+    if(isset($_SESSION["usuario"]))
+        echo " <button value='".$id_noticia."' name='btnCrearComentario'>Enviar</button>";
     echo "</p>";
     echo "</form>";
 
     if(isset($_SESSION["comentario"]))
     {
-        echo "<p class='mensaje'>El comentario se ha realizado con éxito</p>";
+        if($datos_usu_log->tipo=="admin")
+            echo "<p class='mensaje'>El comentario se ha realizado con éxito</p>";
+        else
+            echo "<p class='mensaje'>El comentario se ha realizado con éxito y está a la espera de ser validado por un administrador</p>";
         unset($_SESSION["comentario"]);
     }
 

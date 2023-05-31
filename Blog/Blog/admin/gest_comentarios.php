@@ -20,7 +20,6 @@ if(isset($_SESSION["usuario"]))
 
     if($datos_usu_log->tipo=="admin")
     {
-        echo"-----gest-comen direccion vistaadmin";
         require "../vistas/vista_admin.php";
     }
     else

@@ -50,6 +50,10 @@ if(isset($_POST["btnLogin"]))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - Exam</title>
+    <style>
+        .enlace{border:none;background:none;color:blue;text-decoration:underline;cursor:pointer}
+        .grande{font-size:1.5em}
+    </style>
 </head>
 <body>
     <h1>Blog - Exam</h1>
@@ -83,6 +87,9 @@ if(isset($_POST["btnLogin"]))
         echo "<p class='mensaje'>".$_SESSION["seguridad"]."</p>";
         unset($_SESSION["seguridad"]);
     }
+    
+    require "vistas/vista_noticias.php";
+    
     ?>
 </body>
 </html>

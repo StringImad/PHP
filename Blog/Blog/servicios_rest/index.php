@@ -58,6 +58,15 @@ $app->post('/insertarUsuario',function($request){
 
 });
 
+
+
+$app->get('/obtenerNoticias',function(){
+
+    echo json_encode(obtener_noticias());
+
+
+});
+
 $app->get('/comentarios',function($request){
 
     session_id($request->getParam('api_session'));
@@ -86,17 +95,9 @@ $app->get('/usuarios/{columna}/{valor}',function($request){
 
 $app->get('/comentarios/{id_noticia}',function($request){
 
-    session_id($request->getParam('api_session'));
-    session_start();
-    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
-    { 
-        echo json_encode(obtener_comentarios_noticia($request->getAttribute('id_noticia')));
-    }
-    else
-    {
-        session_destroy();
-        echo json_encode(array('no_login'=>'No logueado'));
-    }
+    
+    echo json_encode(obtener_comentarios_noticia($request->getAttribute('id_noticia')));
+    
    
 });
 
@@ -119,17 +120,9 @@ $app->get('/usuario/{id}',function($request){
 
 $app->get('/noticia/{id}',function($request){
 
-    session_id($request->getParam('api_session'));
-    session_start();
-    if(isset($_SESSION["tipo"]) && $_SESSION["tipo"]=="admin")
-    { 
-        echo json_encode(obtener_noticia($request->getAttribute('id')));
-    }
-    else
-    {
-        session_destroy();
-        echo json_encode(array('no_login'=>'No logueado'));
-    }
+   
+    echo json_encode(obtener_noticia($request->getAttribute('id')));
+   
    
 });
 
