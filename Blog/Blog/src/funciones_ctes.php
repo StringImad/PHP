@@ -1,5 +1,4 @@
 <?php
-
 define("DIR_SERV","http://localhost/proyectos/rec/PHP/Blog/Blog/servicios_rest");
 define("MINUTOS", 5);
 
