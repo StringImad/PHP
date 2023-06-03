@@ -6,7 +6,7 @@ if (isset($_POST['btnLogin'])) {
     $error_usuario = $_POST['usuario'] == "";
     $error_clave = $_POST['clave'] == "";
 
-    $error_form =  $error_usuario || $error_clave;
+    $error_form = $error_usuario || $error_clave;
 
     if (!$error_form) {
         //Si no hay erreres llamamos al servicio
@@ -32,9 +32,16 @@ if (isset($_POST['btnLogin'])) {
 
             $_SESSION["ultima_accion"] = time();
 
-            $_SESSION["api_session"]["api_session"]=$obj->api_session;
+            $_SESSION["api_session"]["api_session"] = $obj->api_session;
         }
     }
+}
+if (isset($_POST["btnSalir"])) {
+    consumir_servicios_REST(DIR_SERV . "/salir", "POST", $_SESSION["api_session"]);
+    session_destroy();
+    header("Location:index.php");
+    exit;
+
 }
 
 ?>
@@ -46,14 +53,38 @@ if (isset($_POST['btnLogin'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .enlinea{
+           display: inline;
+        }
+        .enlace{
+            background-color: none;
+            border: none;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 
 <body>
 
     <?php
-    if (isset($_POST["btnLogin"]) && !$error_form) {
+    if (isset($_SESSION['usuario'])) {
+        require "src/seguridad.php";
+
         echo "<h1>Gestion de guardias</h1>";
-        echo "<p>Bienvenido <strong>" . $_SESSION["usuario"] . "</strong></p>";
+        ?>
+        Bienvenido <strong>
+            <?php echo $_SESSION['usuario']; ?>
+        </strong> -
+        <form class="enlinea" action="index.php" method="post">
+            <button name="btnSalir" class="enlace">Salir</button>
+        </form>
+
+        <?php
+
+        require "vistas/vista_tabla.php";
     } else {
         require "vistas/vista_login.php";
     }
