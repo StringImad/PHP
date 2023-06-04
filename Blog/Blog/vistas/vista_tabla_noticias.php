@@ -17,7 +17,7 @@ if(isset($obj->mensaje_error))
 echo "<h2>Todas las noticias</h2>";
 
 echo "<table id='tabla_comentarios'>";
-echo "<tr><th>ID</th><th>Comentarios</th>
+echo "<tr><th>ID</th><th>Noticias</th>
 <th><form action='gest_comentarios.php' method='post'><button class='enlace' name='btnCrearNoticia'>Crear Noticia</button></form></th>
 </tr>";
 foreach ($obj->noticias as $tupla)

@@ -68,7 +68,7 @@ if(isset($_POST["btnCrearComentario"]))
     $error_form=$_POST["comentario"]=="";
     if(!$error_form)
     {
-        $url=DIR_SERV."/insertarComentario/".$_POST["btnCrearComentario"];
+        $url=DIR_SERV."/insertarComentario/";
         $datos_env["comentario"]=$_POST["comentario"];
         $datos_env["idUsuario"]=$datos_usu_log->idusuario;
         $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
@@ -101,17 +101,22 @@ if(isset($_POST["btnCrearComentario"]))
 
     }
 }
-if(isset($_POST["btnCrearNoticia"]))
+if(isset($_POST["btnContCrearNoticia"]))
 {
-    $error_form=$_POST["titulo"]=="";
-    $error_form=$_POST["copete"]=="";
-    $error_form=$_POST["cuerpo"]=="";
-
+    $error_titulo=$_POST["titulo"]=="";
+    $error_copete=$_POST["copete"]=="";
+    $error_cuerpo=$_POST["cuerpo"]=="";
+    $error_form = $error_titulo || $error_copete || $error_cuerpo;
     if(!$error_form)
     {
-        $url=DIR_SERV."/insertarNoticia/".$_POST["btnCrearNoticia"];
-        $datos_env["noticia"]=$_POST["noticia"];
-        $datos_env["idUsuario"]=$datos_usu_log->idusuario;
+        $datos_usu["idUsuario"]=$datos_usu_log->idusuario;
+
+        $url=DIR_SERV."/insertarNoticia/".$_POST["titulo"]."/".$_POST["copete"]."/".$_POST["cuerpo"]."/". $datos_usu["idUsuario"]."/2";
+        // $datos_env["titulo"]=$_POST["titulo"];
+        // $datos_env["copete"]=$_POST["copete"];
+        // $datos_env["cuerpo"]=$_POST["cuerpo"];
+        // $datos_env["categoria"]=2;
+
         $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
         $respuesta=consumir_servicios_REST($url,"POST",$datos_env);
         $obj=json_decode($respuesta);
@@ -121,6 +126,7 @@ if(isset($_POST["btnCrearNoticia"]))
             session_destroy();
             die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
         }
+        echo ".....";
         if(isset($obj->mensaje_error))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
@@ -135,8 +141,8 @@ if(isset($_POST["btnCrearNoticia"]))
             header("Location:../index.php");
             exit;
         }
-
-        $_SESSION["Noticia"]=$_POST["btnCrearNoticia"];
+        echo $obj->mensaje;
+        $_SESSION["Noticia"]=$_POST["btnContCrearNoticia"];
         header("Location:gest_comentarios.php");
         exit;
 
@@ -176,7 +182,7 @@ if(isset($_POST["btnCrearNoticia"]))
         }
         else
         {
-            if(isset($_POST["btnCrearNoticia"]))
+            if(isset($_POST["btnCrearNoticia"])|| isset($_POST["btnContCrearNoticia"]))
             {
                 echo "<h2>Crear Moticia</h2>";
                 require "../vistas/vista_crear_noticia.php";

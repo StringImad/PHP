@@ -497,5 +497,37 @@ function obtener_noticias()
 
     return $respuesta;
 }
+function insertar_noticia($datos)
+{
+    try
+    {
+        $conexion=new PDO("mysql:host=".SERVIDOR_BD.";dbname=".NOMBRE_BD,USUARIO_BD,CLAVE_BD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")); 
+        try
+        {
+            $consulta="insert into noticias (titulo, copete, cuerpo ,idUsuario, idCategoria) values(?,?,?,?,?)";
+            $sentencia=$conexion->prepare($consulta);
+            $sentencia->execute($datos);
 
+           
+          
+            $respuesta["mensaje"]="La noticia ha sido insertada correctamente";
+            
+
+            $sentencia=null;
+            $conexion=null;
+        }
+        catch(PDOException $e)
+        {
+            $respuesta["mensaje_error"]="Imposible realizar la consulta. Error:".$e->getMessage();
+        }
+        
+
+    }
+    catch(PDOException $e)
+    {
+        $respuesta["mensaje_error"]="Imposible conectar a la BD. Error:".$e->getMessage();
+    }
+
+    return $respuesta;
+}
 ?>
