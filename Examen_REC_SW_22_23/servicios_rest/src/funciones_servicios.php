@@ -94,3 +94,48 @@ function obtenerUsuario($datos) {
     return $respuesta;
 };
 
+function obtener_usuariosGuardia($datos){
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "SELECT usuarios.*   FROM usuarios, horario_guardias  WHERE usuarios.id_usuario = horario_guardias.usuario and dia = ? and hora = ?";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+            if($sentencia->rowCount()>0){
+                $respuesta["usuario"]  = $sentencia->fetchAll(PDO::FETCH_ASSOC); 
+            }else
+                $respuesta["mensaje"] = "Usuarios no se encuentran regis. en la BD";
+            
+            $sentencia=null;
+            $conexion=null;
+        } catch (PDOException $e) {
+            $respuesta["error"] = "Error de consulta";
+        }
+    } catch (PDOException $e) {
+        $respuesta["error"] = "Imposible conectar:" . $e->getMessage();
+    }
+    return $respuesta;
+}
+
+function obtener_deGuardia($datos){
+    try {
+        $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        try {
+            $consulta = "SELECT usuarios.*   FROM usuarios, horario_guardias  WHERE usuarios.id_usuario = horario_guardias.usuario and dia = ? and hora = ? and id_usuario=?";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+            if($sentencia->rowCount()>0){
+                $respuesta["deGuardia"]  = true; 
+            }else
+                $respuesta["deGuardia"] = false;
+            
+            $sentencia=null;
+            $conexion=null;
+        } catch (PDOException $e) {
+            $respuesta["error"] = "Error de consulta";
+        }
+    } catch (PDOException $e) {
+        $respuesta["error"] = "Imposible conectar:" . $e->getMessage();
+    }
+    return $respuesta;
+}

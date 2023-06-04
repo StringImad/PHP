@@ -28,33 +28,46 @@ $app->post('/Login', function ($request) {
 
 });
 $app->get('/Logueado', function ($request) {
-    session_id($request->getParam("api_session"));
+    session_id($request->getAttribute("api_session"));
     session_start();
-    
+
     $datos = array();
     //Sería lo mismo que     if(isset($_SESSION["tipo"])) ????
     if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
         $datos[] = $_SESSION["usuario"];
         $datos[] = $_SESSION["clave"];
     }
-    
+
     echo json_encode(logueado($datos));
 });
 
 $app->get('/obtenerUsuario/{id_usuario}', function ($request) {
     // session_id($request->getAttribute("api_session"));
     // session_start();
-    
+
     // $datos = array();
     //Sería lo mismo que     if(isset($_SESSION["tipo"])) ????
     // if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
-    
+
     // }
     $datos[] = $request->getAttribute("id_usuario");
 
-    echo json_encode(obtener_usuario($datos));
+    echo json_encode(obtenerUsuario($datos));
 });
+$app->get('/usuariosGuardia/{dia}/{hora}', function ($request) {
 
+    $datos[] = $request->getAttribute("dia");
+    $datos[] = $request->getAttribute("hora");
+    echo json_encode(obtener_usuariosGuardia($datos));
+});
+$app->get('/deGuardia/{dia}/{hora}/{id_usuario}', function ($request) {
+
+    $datos[] = $request->getAttribute("dia");
+    $datos[] = $request->getAttribute("hora");
+    $datos[] = $request->getAttribute("id_usuario");
+
+    echo json_encode(obtener_deGuardia($datos));
+});
 // Una vez creado servicios los pongo a disposición
 $app->run();
 ?>

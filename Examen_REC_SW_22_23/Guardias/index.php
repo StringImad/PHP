@@ -63,6 +63,19 @@ if (isset($_POST["btnSalir"])) {
             text-decoration: underline;
             cursor: pointer;
         }
+        .tabla{
+            width: 90%;
+
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .tabla td, th{
+            border: 1px solid black;
+
+        }
+        .tabla th{
+            background-color: #ccc;
+        }
 
     </style>
 </head>
