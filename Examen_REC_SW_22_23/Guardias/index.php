@@ -29,11 +29,12 @@ if (isset($_POST['btnLogin'])) {
         } else {
             $_SESSION['usuario'] = $datos_env["usuario"];
             $_SESSION["clave"] = $datos_env["clave"];
-
+            $_SESSION["id_usuario"] = $obj->usuario->id_usuario;
             $_SESSION["ultima_accion"] = time();
 
             $_SESSION["api_session"]["api_session"] = $obj->api_session;
         }
+        echo "-------------".$_SESSION['id_usuario'];
     }
 }
 if (isset($_POST["btnSalir"])) {
@@ -76,7 +77,9 @@ if (isset($_POST["btnSalir"])) {
         .tabla th{
             background-color: #ccc;
         }
-
+        #recreo{
+            text-align: center;
+        }
     </style>
 </head>
 
