@@ -218,28 +218,30 @@ $app->post('/insertarComentario/{id_noticia}',function($request){
 
 $app->post('/insertarNoticia/{titulo}/{copete}/{cuerpo}/{idUsuario}/{idCategoria}',function($request){
 
-    session_id($request->getParam('api_session'));
-    session_start();
+    $datos[]=$request->getParam("titulo");
+    $datos[]=$request->getParam("copete");
+    $datos[]=$request->getParam("cuerpo");
+    $datos[]=$request->getParam("idUsuario");
+
+    $datos[]=$request->getParam("idCategoria");
+     echo json_encode(insertar_noticia($datos));
+
+    // session_id($request->getParam('api_session'));
+    // session_start();
 
 
-    if(isset($_SESSION["tipo"]))
-    { 
-        $datos[]=$request->getParam("titulo");
-        $datos[]=$request->getParam("copete");
-        $datos[]=$request->getParam("cuerpo");
-        $datos[]=$request->getParam("idUsuario");
-
-        $datos[]=$request->getParam("idCategoria");
+    // if(isset($_SESSION["tipo"]))
+    // { 
+      
 
       
             
-        echo json_encode(insertar_noticia($datos));
-    }
-    else
-    {
-        session_destroy();
-        echo json_encode(array('no_login'=>'No logueado'));
-    }
+    // }
+    // else
+    // {
+    //     session_destroy();
+    //     echo json_encode(array('no_login'=>'No logueado'));
+    // }
 });
 // Una vez creado servicios los pongo a disposición
 $app->run();
