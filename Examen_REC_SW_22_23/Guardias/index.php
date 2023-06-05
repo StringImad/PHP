@@ -15,13 +15,13 @@ if (isset($_POST['btnLogin'])) {
         $datos_env["clave"] = md5($_POST["clave"]);
         $respuesta = consumir_servicios_REST($url, "POST", $datos_env);
         $obj = json_decode($respuesta);
-
+        //si no recibo un JSON
         if (!$obj) {
             die(error_page("Recup exam", "error", "error consumiendo el servicio: " . $url . $respuesta));
         }
 
         if (isset($obj->error)) {
-            die(error_page("Recup exam", "error", "error en la bd", $obj->$error));
+            die(error_page("Recup exam",  "error en la bd", $obj->$error));
         }
 
         if (isset($obj->mensaje)) {
@@ -33,12 +33,14 @@ if (isset($_POST['btnLogin'])) {
             $_SESSION["ultima_accion"] = time();
 
             $_SESSION["api_session"]["api_session"] = $obj->api_session;
+            header("Location:index.php");
+            exit;
+        
         }
-        echo "-------------".$_SESSION['id_usuario'];
     }
 }
 if (isset($_POST["btnSalir"])) {
-    consumir_servicios_REST(DIR_SERV . "/salir", "POST", $_SESSION["api_session"]);
+    consumir_servicios_REST(DIR_SERV . "/Salir", "POST", $_SESSION["api_session"]);
     session_destroy();
     header("Location:index.php");
     exit;

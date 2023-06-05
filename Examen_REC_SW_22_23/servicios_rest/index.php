@@ -32,7 +32,6 @@ $app->get('/Logueado', function ($request) {
     session_start();
 
     $datos = array();
-    //Sería lo mismo que     if(isset($_SESSION["tipo"])) ????
     if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
         $datos[] = $_SESSION["usuario"];
         $datos[] = $_SESSION["clave"];
@@ -46,7 +45,6 @@ $app->get('/obtenerUsuario/{id_usuario}', function ($request) {
     // session_start();
 
     // $datos = array();
-    //Sería lo mismo que     if(isset($_SESSION["tipo"])) ????
     // if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
 
     // }
