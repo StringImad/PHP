@@ -39,7 +39,7 @@ for ($i = 0; $i <7; $i++) {
 
 }
 echo "</table>";
-if(isset($_POST['btnVerEquipo'])){
+if(isset($_POST['btnVerEquipo']) || isset($_POST['btnVerProfesor'])){
 echo "<h2>Equipo de Guardia ".$_POST["numEquipo"]."</h2>";
 
 $url = DIR_SERV . "/deGuardia/".$_POST["dia"]."/".$_POST["hora"]."/".$_SESSION["id_usuario"];
@@ -95,27 +95,33 @@ if($estaDeGuardia){
         echo "<tr>";
         echo "<td>";
         echo "<form  method=post>";
+        echo "<input type='hidden' name='btnVerProfesor2'  value='".$tupla->id_usuario."'>";
+
         echo "<button class='enlace' name='btnVerProfesor' value='".$tupla->id_usuario."'>".$tupla->nombre . "</button>";
         echo "</form></br>";
         echo "</td>";
         echo "<td>";
 
-        // $url = DIR_SERV . "/obtenerUsuario/".$_POST["btnVerProfesor"];
+         $url = DIR_SERV . "/obtenerUsuario/".$tupla->id_usuario;
       
-        // $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
-        // $obj = json_decode($respuesta);
+         $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
+         $obj = json_decode($respuesta);
         
-        // if (!$obj) {
-        //     die(error_page("Recup exam", "error", "error consumiendo el servicio: " . $url . $respuesta));
-        // }
+         if (!$obj) {
+             die(error_page("Recup exam", "error", "error consumiendo el servicio: " . $url . $respuesta));
+         }
         
-        // if (isset($obj->error)) {
-        //     die(error_page("Recup exam",  "error en la bd", $obj->$error));
-        // }
-        // if (isset($obj->mensaje)) {
-        //     die(error_page("Recup exam",  "No hay usuarios", $obj->$error));
-        // }
+         if (isset($obj->error)) {
+             die(error_page("Recup exam",  "error en la bd", $obj->$error));
+         }
+         if (isset($obj->mensaje)) {
+             die(error_page("Recup exam",  "No hay usuarios", $obj->$error));
+         }
+         if(isset($_POST["btnVerProfesor"])){
             echo "Nombre: .$tupla->nombre .";
+
+         }
+     
       
        
         echo "</td>";
@@ -123,10 +129,7 @@ if($estaDeGuardia){
 
     }
  
-    if(isset($_POST["btnVerProfesor"])){
-     
-    }
-
+  
 
     echo "</table>";
 
