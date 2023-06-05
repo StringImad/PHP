@@ -14,13 +14,13 @@ if(isset($_POST["btnCrearComentario"]))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
         if(isset($obj->mensaje_error))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         if(isset($obj->no_login))
@@ -44,7 +44,7 @@ if(isset($_POST["btnCrearComentario"]))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Exam</title>
+    <title>Marbella al Dia</title>
     <style>
         .grande{font-size:1.5em}
         .enlinea{display:inline}
@@ -52,7 +52,7 @@ if(isset($_POST["btnCrearComentario"]))
     </style>
 </head>
 <body>
-    <h1>Blog - Exam</h1>
+    <h1>Marbella al Dia</h1>
     <div>
         Bienvenido <strong><?php echo $datos_usu_log->usuario;?></strong> - 
         <form class="enlinea" action="principal.php" method="post"> 

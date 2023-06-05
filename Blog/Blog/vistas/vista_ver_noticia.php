@@ -40,6 +40,8 @@ else
 {
     echo "<h2>".$obj->noticia->titulo."</h2>";
     echo "<p>Publicado por <strong>".$obj->noticia->usuario."</strong> en <em>".$obj->noticia->valor."</em></p>";
+    echo "<p>".$obj->noticia->copete."</p>";
+
     echo "<p>".$obj->noticia->cuerpo."</p>";
 
     echo "<h2>Comentarios</h2>";

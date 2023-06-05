@@ -10,13 +10,13 @@ if(isset($_POST["btnContRegistro"]))
         if(!$obj)
         {
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
         if(isset($obj->mensaje_error))
         {
             
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         $error_usuario=isset($obj->usuarios);        
@@ -31,13 +31,13 @@ if(isset($_POST["btnContRegistro"]))
         if(!$obj)
         {
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
         if(isset($obj->mensaje_error))
         {
             
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         $error_email=isset($obj->usuarios);    
@@ -55,13 +55,13 @@ if(isset($_POST["btnContRegistro"]))
         if(!$obj)
         {
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
         if(isset($obj->mensaje_error))
         {
             
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         $_SESSION["usuario"]=$datos_env["usuario"];
@@ -82,11 +82,11 @@ if(isset($_POST["btnContRegistro"]))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Exam</title>
+    <title>Marbella al Dia</title>
     
 </head>
 <body>
-    <h1>Blog - Exam</h1>
+    <h1>Marbella al Dia</h1>
     <h2>Registro Nuevo usuario</h2>
     <form action="index.php" method="post">
         <p>

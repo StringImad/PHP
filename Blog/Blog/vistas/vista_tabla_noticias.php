@@ -31,7 +31,7 @@ foreach ($obj->noticias as $tupla)
     echo "</td>";
     echo "<td><form action='gest_comentarios.php' method='post'>";
     echo "<button class='enlace' value='".$tupla->idNoticia."' name='btnEditarNoticia'>Editar</button> - ";
-    echo "<button class='enlace' value='".$tupla->idNoticia."' name='btnBorrar´Noticia'>Borrar</button>";
+    echo "<button class='enlace' value='".$tupla->idNoticia."' name='btnBorrarNoticia'>Borrar</button>";
     echo "</form></td>";
     echo "</tr>";
 }

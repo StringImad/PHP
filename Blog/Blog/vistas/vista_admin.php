@@ -7,12 +7,12 @@ if(isset($_POST["btnContBorrar"]))
     if(!$obj)
     {
         session_destroy();
-        die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+        die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
     }
     if(isset($obj->mensaje_error))
     {
         session_destroy();
-        die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+        die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
     }
 
     if(isset($obj->no_login))
@@ -28,7 +28,35 @@ if(isset($_POST["btnContBorrar"]))
     exit;
 
 }
+if(isset($_POST["btnContBorrarNoticia"]))
+{
+    $url=DIR_SERV."/borrarNoticia/".$_POST["btnContBorrarNoticia"];
+    $respuesta=consumir_servicios_REST($url,"DELETE",$_SESSION["api_session"]);
+    $obj=json_decode($respuesta);
+    if(!$obj)
+    {
+        session_destroy();
+        die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
+    }
+    if(isset($obj->mensaje_error))
+    {
+        session_destroy();
+        die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
+    }
 
+    if(isset($obj->no_login))
+    {
+        session_unset();
+        $_SESSION["seguridad"]="El tiempo de sesión de la API ha expirado";
+        header("Location:../index.php");
+        exit;
+    }
+
+    $_SESSION["accion"]="Noticia borrado con éxito";
+    header("Location:gest_comentarios.php");
+    exit;
+
+}
 if(isset($_POST["btnContAprobar"]))
 {
     $url=DIR_SERV."/actualizarComentario/".$_POST["btnContAprobar"];
@@ -40,13 +68,13 @@ if(isset($_POST["btnContAprobar"]))
     {
         consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
         session_destroy();
-        die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+        die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
     }
     if(isset($obj->mensaje_error))
     {
         consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
         session_destroy();
-        die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+        die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
     }
 
     if(isset($obj->no_login))
@@ -68,7 +96,7 @@ if(isset($_POST["btnCrearComentario"]))
     $error_form=$_POST["comentario"]=="";
     if(!$error_form)
     {
-        $url=DIR_SERV."/insertarComentario/";
+        $url=DIR_SERV."/insertarComentario/".$_POST["btnCrearComentario"];
         $datos_env["comentario"]=$_POST["comentario"];
         $datos_env["idUsuario"]=$datos_usu_log->idusuario;
         $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
@@ -78,13 +106,13 @@ if(isset($_POST["btnCrearComentario"]))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
         if(isset($obj->mensaje_error))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         if(isset($obj->no_login))
@@ -107,15 +135,18 @@ if(isset($_POST["btnContCrearNoticia"]))
     $error_copete=$_POST["copete"]=="";
     $error_cuerpo=$_POST["cuerpo"]=="";
     $error_form = $error_titulo || $error_copete || $error_cuerpo;
+    //idUsuario es el usuario que este logueado y el idCategoria sacarlo desde un sele
     if(!$error_form)
     {
-        $datos_usu["idUsuario"]=$datos_usu_log->idusuario;
-
-        $url=DIR_SERV."/insertarNoticia/".$_POST["titulo"]."/".$_POST["copete"]."/".$_POST["cuerpo"]."/". $datos_usu["idUsuario"]."/2";
-        // $datos_env["titulo"]=$_POST["titulo"];
-        // $datos_env["copete"]=$_POST["copete"];
-        // $datos_env["cuerpo"]=$_POST["cuerpo"];
-        // $datos_env["categoria"]=2;
+        // $datos_usu["idUsuario"]=$datos_usu_log->idusuario;
+        $url2=DIR_SERV."/insertarNoticia/".$_POST['titulo']."/".$_POST['copete']."/".$_POST['cuerpo']."/2/2";
+        echo $url2;
+        $url=DIR_SERV."/insertarNoticia";
+        $datos_env["titulo"] = $_POST['titulo'];
+        $datos_env["copete"] = $_POST['copete'];
+        $datos_env["cuerpo"] = $_POST['cuerpo'];
+        $datos_env["idUsuario"] =2;
+        $datos_env["idCategoria"] = $_POST['categoria'];
 
         $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
         $respuesta=consumir_servicios_REST($url,"POST",$datos_env);
@@ -124,14 +155,13 @@ if(isset($_POST["btnContCrearNoticia"]))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
         }
-        echo ".....";
         if(isset($obj->mensaje_error))
         {
             consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
 
         if(isset($obj->no_login))
@@ -141,8 +171,65 @@ if(isset($_POST["btnContCrearNoticia"]))
             header("Location:../index.php");
             exit;
         }
-        echo $obj->mensaje;
         $_SESSION["Noticia"]=$_POST["btnContCrearNoticia"];
+        $_SESSION["accion"]="Noticia creada con éxito";
+
+        header("Location:gest_comentarios.php");
+        exit;
+
+    }
+}
+
+
+if(isset($_POST["btnContEditarNoticia"])){
+
+    $error_titulo=$_POST["titulo"]=="";
+    $error_copete=$_POST["copete"]=="";
+    $error_cuerpo=$_POST["cuerpo"]=="";
+
+
+    $error_form = $error_titulo || $error_copete || $error_cuerpo;
+    //idUsuario es el usuario que este logueado y el idCategoria sacarlo desde un sele
+    if(!$error_form)
+    {
+        // $datos_usu["idUsuario"]=$datos_usu_log->idusuario;
+
+
+        $url2=DIR_SERV."/actualizarNoticia/".$_POST["btnContEditarNoticia"]."/".$_POST["titulo"]."/".$_POST["copete"]."/".$_POST["cuerpo"]."/".$_POST["idCategoria"];
+        $url=DIR_SERV."/actualizarNoticia/".$_POST["btnContEditarNoticia"];
+
+         $datos_env["titulo"] = $_POST['titulo'];
+         $datos_env["copete"] = $_POST['copete'];
+         $datos_env["cuerpo"] = $_POST['cuerpo'];
+         $datos_env["idCategoria"] = $_POST['idCategoria'];
+
+        $datos_env["api_session"]=$_SESSION["api_session"]["api_session"];
+        $respuesta=consumir_servicios_REST($url,"PUT",$datos_env);
+        $obj=json_decode($respuesta);
+        if(!$obj)
+        {
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+            session_destroy();
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
+        }
+        if(isset($obj->mensaje_error))
+        {
+            consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
+            session_destroy();
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
+        }
+
+        if(isset($obj->no_login))
+        {
+            session_unset();
+            $_SESSION["seguridad"]="El tiempo de sesión de la API ha expirado";
+            header("Location:../index.php");
+            exit;
+        }
+
+        $mensaje=$obj->mensaje;
+        $_SESSION["accion"]=$mensaje;
+
         header("Location:gest_comentarios.php");
         exit;
 
@@ -156,7 +243,7 @@ if(isset($_POST["btnContCrearNoticia"]))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Exam</title>
+    <title>Marbella al Dia</title>
     <style>
         .enlinea{display:inline}
         .enlace{border:none;background:none;color:blue;text-decoration:underline;cursor:pointer}
@@ -166,7 +253,7 @@ if(isset($_POST["btnContCrearNoticia"]))
     </style>
 </head>
 <body>
-    <h1>Blog - Exam</h1>
+    <h1>Marbella al Dia</h1>
     <div>
         Bienvenido <strong><?php echo $datos_usu_log->usuario;?></strong> - 
         <form class="enlinea" action="gest_comentarios.php" method="post"> 
@@ -184,13 +271,13 @@ if(isset($_POST["btnContCrearNoticia"]))
         {
             if(isset($_POST["btnCrearNoticia"])|| isset($_POST["btnContCrearNoticia"]))
             {
-                echo "<h2>Crear Moticia</h2>";
+                echo "<h2>Crear Noticia</h2>";
                 require "../vistas/vista_crear_noticia.php";
             
             }
-            if(isset($_POST["btnBorrar"]))
+            if(isset($_POST["btnBorrarNoticia"]))
             {
-                echo "<h2>borrar Moticia</h2>";
+                echo "<h2>Borrar Noticia</h2>";
 
                 require "../vistas/vista_conf_borrar_noticia.php";
             
@@ -198,9 +285,9 @@ if(isset($_POST["btnContCrearNoticia"]))
 
             if(isset($_POST["btnEditarNoticia"]))
             {
-                echo "<h2>Editar Moticia</h2>";
+                echo "<h2>Editar Noticia</h2>";
 
-                require "../vistas/vista_conf_editar_noticia.php";
+                require "../vistas/vista_editar_noticia.php";
             }
             require "../vistas/vista_tabla_noticias.php";
 

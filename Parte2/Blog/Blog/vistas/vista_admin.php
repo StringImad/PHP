@@ -35,7 +35,7 @@ if (isset($_POST['btnEnviarComentario'])) {
             consumir_servicios_REST(DIR_SERV . "/salir", "POST", $_SESSION["api_session"]);
 
             session_destroy();
-            die(error_page("BLOG 4 - SW", "Práctica 4 - SW", "Error consumiendo el servicio: " . $url));
+            die(error_page("Marbella Al Dia - SW", "Práctica 4 - SW", "Error consumiendo el servicio: " . $url));
         }
         if (isset($obj->mensaje_error)) {
             consumir_servicios_REST(DIR_SERV . "/salir", "POST", $_SESSION["api_session"]);
@@ -92,7 +92,7 @@ if (isset($_POST["btnContAprobar"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Exam</title>
+    <title>Marbella al Dia</title>
     <style>
         .enlinea {
             display: inline

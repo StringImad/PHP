@@ -1,6 +1,30 @@
 <?php
-echo "<form action='gest_comentarios.php'  method='post'>";
+ $url=DIR_SERV."/obtenerCategorias";
+ $respuesta=consumir_servicios_REST($url,"GET");
+ $obj=json_decode($respuesta);
+ if(!$obj)
+ {
+     session_destroy();
+     die("<p>Error consumiendo el servicio: ".$url."</p></body></html>");
+ }
+ if(isset($obj->mensaje_error))
+ {
+     session_destroy();
+     die("<p>".$obj->mensaje_error."</p></body></html>");
+ }
 
+echo "<form action='gest_comentarios.php'  method='post'>";
+echo "<p>";
+echo "<select name='categoria' id='categoriaSelca'>";
+
+foreach ($obj->categorias as $tupla)
+{
+    echo "<option value='$tupla->idCategoria'>$tupla->valor</option>";
+
+}
+echo "</select>";
+
+echo "</p>";
 echo "<p>";
 echo "<label for='titulo'>Titulo:</label><br/>";
 echo "<input type='text' name='titulo' value='";
@@ -37,7 +61,7 @@ echo "</p>";
 
 echo "<p>";
 echo "<button>Volver</button>";
-echo " <button value='" . $_POST['btnCrearNoticia'] . "' name='btnContCrearNoticia'>Enviar</button>";
+echo " <button  name='btnContCrearNoticia'>Enviar</button>";
 echo "</p>";
 echo "</form>";
 

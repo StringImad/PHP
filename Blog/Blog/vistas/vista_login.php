@@ -13,13 +13,13 @@ if(isset($_POST["btnLogin"]))
         if(!$obj)
         {
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url.$respuesta));
+            die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url.$respuesta));
         }
 
         if(isset($obj->mensaje_error))
         {
             session_destroy();
-            die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+            die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
         }
         if(isset($obj->mensaje))
             $error_usuario=true;
@@ -49,14 +49,14 @@ if(isset($_POST["btnLogin"]))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Exam</title>
+    <title>Marbella al Dia</title>
     <style>
         .enlace{border:none;background:none;color:blue;text-decoration:underline;cursor:pointer}
         .grande{font-size:1.5em}
     </style>
 </head>
 <body>
-    <h1>Blog - Exam</h1>
+    <h1>Marbella al Dia</h1>
     <form action="index.php" method="post">
         <p>
             <label for="usuario">Usuario: </label>

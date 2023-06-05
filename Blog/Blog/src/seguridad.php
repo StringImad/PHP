@@ -8,13 +8,13 @@ if(!$obj)
 {
     consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
     session_destroy();
-    die(error_page("Blog - Exam","Blog - Exam","Error consumiendo el servicio: ".$url));
+    die(error_page("Marbella al Dia","Marbella al Dia","Error consumiendo el servicio: ".$url));
 }
 if(isset($obj->mensaje_error))
 {
     consumir_servicios_REST(DIR_SERV."/salir","POST",$_SESSION["api_session"]);
     session_destroy();
-    die(error_page("Blog - Exam","Blog - Exam",$obj->mensaje_error));
+    die(error_page("Marbella al Dia","Marbella al Dia",$obj->mensaje_error));
 }
 
 if(isset($obj->no_login))

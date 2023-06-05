@@ -10,12 +10,12 @@ if (isset($_POST["btnLogin"])) {
         $obj = json_decode($respuesta);
         if (!$obj) {
             session_destroy();
-            die(error_page("Blog - Exam", "Blog - Exam", "Error consumiendo el servicio: " . $url . $respuesta));
+            die(error_page("Marbella al Dia", "Marbella al Dia", "Error consumiendo el servicio: " . $url . $respuesta));
         }
 
         if (isset($obj->mensaje_error)) {
             session_destroy();
-            die(error_page("Blog - Exam", "Blog - Exam", $obj->mensaje_error));
+            die(error_page("Marbella al Dia", "Marbella al Dia", $obj->mensaje_error));
         }
         if (isset($obj->mensaje))
             $error_usuario = true;
