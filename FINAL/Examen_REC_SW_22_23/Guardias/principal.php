@@ -59,11 +59,11 @@ session_start();
     <div>Bienvenido<strong>
 
             <?php
-             echo $_SESSION["usuario"];
+             echo $datos_usu_log->usuario;
             //  session_destroy();
             ?>
         </strong>
-         <form class='enlinea' method="post" action="index.php">
+         <form class='enlinea' method="post" action="principal.php">
             <button class='enlace' type="submit" name="btnSalir">Salir</button>
         </form> 
     </div>
