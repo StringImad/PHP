@@ -1,5 +1,4 @@
 <?php
- require "src/funciones.php";
 $url = DIR_SERV . "/logueado";
 
 $respuesta = consumir_servicios_REST($url, "GET",$_SESSION["api_session"]);

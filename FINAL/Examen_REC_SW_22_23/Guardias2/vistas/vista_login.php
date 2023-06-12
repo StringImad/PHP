@@ -1,7 +1,5 @@
 <?php
-    require "src/funciones.php";
-
-if (isset($_POST['btnLogin'])) {
+if (isset($_POST["btnLogin"])) {
     $error_usuario = $_POST["usuario"] == "";
     $error_clave = $_POST["clave"] == "";
     $error_form = $error_usuario || $error_clave;
@@ -33,51 +31,56 @@ if (isset($_POST['btnLogin'])) {
             header("Location:index.php");
             exit;
         }
+       
     }
-}
 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestion de Guardias</title>
 </head>
 
 <body>
+    <?php 
+if(isset($_SESSION["seguridad"])){
+    echo "<p>". $_SESSION['seguridad']."</p>";
+}
+
+
+?>
+    <h1>Gestion de Guardias</h1>
     <form method="post" action="index.php">
         <p>
-            <lablel for="usuario">Usuario:</lablel>
-            <input type="text" name="usuario" id="usuario" value="<?php if (isset($_POST["usuario"]))
-                echo $_POST["usuario"] ?>" />
-                <?php
-            if (isset($_POST["btnLogin"]) && $error_usuario) {
-                if ( $_POST["usuario"] == "") {
-                    echo "<span class='error'>*Campo Vacio*</span>";
-                } else {
-                    echo "<span class='error'>*Usuario no existe*</span>";
 
-                }
-            }
-
-            ?>
-        </p>
-
-        <p>
-            <lablel for="clave">clave:</lablel>
-            <input type="password" name="clave" id="clave" />
+            <label for="usuario">Usuario: </label>
+            <input type="text" id="usuario" name="usuario" value="<?php if (isset($_POST['usuario']))
+                echo $_POST['usuario']; ?>" />
             <?php
-            if (isset($_POST["btnLogin"]) && $error_form) {
-                echo "<span class='error'>*Campo Vacio*</span>";
-
-            }
+            if (isset($_POST['btnLogin']) && $error_usuario)
+                if($_POST["usuario"] =="")
+                echo "<span class='error'>*Campo vacio*</span>";
+                else
+                echo "<span class='error'>*Usuario o contraseña incorrectos*</span>";
 
             ?>
         </p>
         <p>
-            <button type="submit" name="btnLogin" >Login</button>
+
+            <label for="clave">clave: </label>
+            <input type="password" id="clave" name="clave" />
+            <?php
+            if (isset($_POST['btnLogin']) && $error_clave)
+                echo "<span class='error'>*Campo vacio*</span>";
+            ?>
+        </p>
+        <p>
+            <button type="submit" name="btnLogin" id="btnLogin">Entrar</button>
     </form>
 </body>
 
