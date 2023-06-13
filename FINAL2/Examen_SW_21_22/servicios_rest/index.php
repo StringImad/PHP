@@ -6,15 +6,15 @@ require __DIR__ . '/Slim/autoload.php';
 $app = new \Slim\App;
 
 
-$app->post('/logueado', function ($request) {
-    // session_start();??????????
+$app->get('/logueado', function ($request) {
+    session_id($request->getParam("api_session"));
+    session_start();
     if (isset($_SESSION["usuario"])) {
         $datos[] = $_SESSION["usuario"];
         $datos[] = $_SESSION["clave"];
-        echo json_encode(login($datos));
+        echo json_encode(logueado($datos));
 
     } else {
-        session_destroy();
         echo json_encode(array("no_auth" => "Session api terminadoa"));
 
     }
@@ -22,8 +22,11 @@ $app->post('/logueado', function ($request) {
 });
 
 $app->post('/salir', function ($request) {
-    // session_start();???????????
+    session_id($request->getParam("api_session"));
+
+    session_start();
     session_destroy();
+
     echo json_encode(array("log_out" => "saliendo de la api"));
 });
 
@@ -39,6 +42,11 @@ $app->get('/horario/{id_usuario}', function ($request) {
     echo json_encode(obtenerHorarioUsuario($datos));
 
 });
-// Una vez creado servicios los pongo a disposición
+
+$app->get('/usuarios', function ($request) {
+    echo json_encode(obtenerUsuariosNoAdmin());
+
+});
+//Una vez creado servicios los pongo a disposición
 $app->run();
 ?>

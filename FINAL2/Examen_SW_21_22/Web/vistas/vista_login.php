@@ -14,26 +14,28 @@ if (isset($_POST['btnLogin'])) {
         $obj = json_decode($respuesta);
         if (!$obj) {
             session_destroy();
-            die(error_page("ERROR", "Error consumiendo el servicio".$url));
+            die(error_page("ERROR", "Error consumiendo el servicio: " . $url));
         }
 
-         if(isset($obj->error)) {
+        if (isset($obj->error)) {
             session_destroy();
-             die(error_page("ERROR", "Error en la BD".$obj->error));
+            die(error_page("ERROR", "Error en la BD" . $obj->error));
 
-         }
+        }
 
-        if(isset($obj->mensaje)) {
+        if (isset($obj->mensaje)) {
 
             $error_usuario = true;
 
-        }else{
+        } else {
             $_SESSION["usuario"] = $datos_env["usuario"];
             $_SESSION["clave"] = $datos_env["clave"];
             $_SESSION["tipo"] = $obj->usuario->tipo;
-            // $_SESSION["api_session"]["api_session"] = session_id();
+            $_SESSION["api_session"]["api_session"] = $obj->api_session;
 
             $_SESSION["ultima_accion"] = time();
+            header("Location:index.php");
+            exit;
         }
     }
 
@@ -83,7 +85,12 @@ if (isset($_POST['btnLogin'])) {
             <button type="submit" name="btnLogin" id="btnLogin">Login</button>
         </p>
     </form>
+    <p> <?php
+           if(isset($_SESSION["seguridad"])){
+           echo $_SESSION["seguridad"];
 
+           }
+        ?></p>
 </body>
 
 </html>

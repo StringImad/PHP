@@ -8,9 +8,12 @@
 </head>
 
 <body>
-<div>
-    Bienvenido: <?php echo $_SESSION["usuario"]; ?>
-</div>
+    <div>
+        Bienvenido:
+        <?php echo $_SESSION["usuario"];
+        ; ?>
+        <form method="post" action="index.php"><button type="submit" name="btnSalir">Salir</button></form>
+    </div>
 </body>
 
 </html>
