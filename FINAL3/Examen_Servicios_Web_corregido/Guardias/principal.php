@@ -14,6 +14,27 @@ if (isset($_POST["btnSalir"])) {
 if (isset($_SESSION["usuario"])) {
 
     require "src/seguridad.php";
+
+    $url = DIR_SERV . "/guardiasUsuario/".$datos_usu_log->id_usuario;
+
+    $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
+
+    $obj = json_decode($respuesta);
+
+    if (!$obj) {
+        session_destroy();
+        die(error_page("error", "Error consumiendo el servicio: ", $url));
+    }
+    if (isset($obj->error)) {
+        session_destroy();
+        die(error_page("error", "Error de la BD: ", $obj->error));
+    }
+
+    if (isset($obj->mensaje)) {
+        session_destroy();
+        die(error_page("error", "Error no hay guardias: ", $obj->mensaje));
+    }
+
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -35,7 +56,7 @@ if (isset($_SESSION["usuario"])) {
             th {
                 background-color: #ccc;
             }
-
+ 
             tr,
             td,
             th {
@@ -58,25 +79,6 @@ if (isset($_SESSION["usuario"])) {
             <h2>Equipos de Guardia del IES Mar De alboran</h2>
             <?php
 
-            $url = DIR_SERV . "/guardiasUsuario/".$datos_usu_log->id_usuario;
-
-            $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
-
-            $obj = json_decode($respuesta);
-
-            if (!$obj) {
-                session_destroy();
-                die(error_page("error", "Error consumiendo el servicio: ", $url));
-            }
-            if (isset($obj->error)) {
-                session_destroy();
-                die(error_page("error", "Error de la BD: ", $obj->error));
-            }
-
-            if (isset($obj->mensaje)) {
-                session_destroy();
-                die(error_page("error", "Error no hay guardias: ", $obj->mensaje));
-            }
             echo "<table class='tabla'>";
             echo "<tr>";
             echo "<th></th><th>Lunes</th><th>Martes</th><th>Miercoles</th><th>Jueves</th><th>Viernes</th>";
