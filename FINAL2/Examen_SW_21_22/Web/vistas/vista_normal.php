@@ -52,19 +52,22 @@
             <tr>
 
                 <?php
-                $url = DIR_SERV."/horario/".$datos_usu_log->id_usuario;
+                $url = DIR_SERV . "/horario/" . $datos_usu_log->id_usuario;
                 //MANDAR api session tmnm
-                $respuesta = consumir_servicios_REST($url,"GET",$_SESSION["api_session"]);
+                $respuesta = consumir_servicios_REST($url, "GET", $_SESSION["api_session"]);
                 $obj = json_decode($respuesta);
                 if (!$obj) {
+                    //consu8mir salir
                     session_destroy();
                     die(error_page("ERROR", "Error consumiendo el servicio: " . $url));
                 }
-        
+
                 if (isset($obj->error)) {
+                    //consu8mir salir
+                
                     session_destroy();
                     die(error_page("ERROR", "Error en la BD" . $obj->error));
-        
+
                 }
 
                 $horas = 8;
@@ -87,16 +90,17 @@
                     echo "</td>";
                     for ($j = 1; $j < 6; $j++) {
                         echo " <td>";
-                        if($hor==4){
+                        if ($hor == 4) {
                             echo "recreo";
-                        }else{
-                        foreach ($obj->horario as $tuplas) {
-                            if($tuplas->dia==$j&&$tuplas->hora==$hor){
-                              echo  $tuplas->nombre;
+                        } else {
+                            foreach ($obj->horario as $tuplas) {
+                                if ($tuplas->dia == $j && $tuplas->hora == $hor) {
+                                    echo $tuplas->nombre;
+                                }
                             }
-                        }}
+                        }
                         // echo "hora: ".$hor;
-
+                
                         // echo "dia: ".$j;
                         echo "</td>";
                     }

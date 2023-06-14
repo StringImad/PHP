@@ -40,10 +40,11 @@ $app->post('/login', function ($request) {
 $app->get('/horario/{id_usuario}', function ($request) {
     session_id($request->getParam("api_session"));
     session_start();
-    if(isset($_SESSION["usuario"])){
+    if (isset($_SESSION["usuario"])) {
         $datos[] = $request->getAttribute("id_usuario");
         echo json_encode(obtenerHorarioUsuario($datos));
-    }else{
+    } else {
+        session_destroy();
         echo json_encode(array("no_auth" => "saliendo de la api"));
 
     }
@@ -52,7 +53,16 @@ $app->get('/horario/{id_usuario}', function ($request) {
 });
 
 $app->get('/usuarios', function ($request) {
-    echo json_encode(obtenerUsuariosNoAdmin());
+    session_id($request->getParam("api_session"));
+    session_start();
+    if (isset($_SESSION["usuario"]) && $_SESSION["tipo"] == "admin") {
+        echo json_encode(obtenerUsuariosNoAdmin());
+
+    } else {
+        session_destroy();
+        echo json_encode(array("no_auth" => "saliendo de la api"));
+
+    }
 
 });
 
@@ -66,37 +76,58 @@ $app->get('/tieneGrupo/{dia}/{hora}/{id_usuario}', function ($request) {
 });
 
 $app->get('/grupos/{dia}/{hora}/{id_usuario}', function ($request) {
-    $datos[] = $request->getAttribute("dia");
-    $datos[] = $request->getAttribute("hora");
-    $datos[] = $request->getAttribute("id_usuario");
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"]) && $_SESSION["tipo"] == "admin") {
+        $datos[] = $request->getAttribute("dia");
+        $datos[] = $request->getAttribute("hora");
+        $datos[] = $request->getAttribute("id_usuario");
 
-    echo json_encode(obtenerGrupoDiaHoraUsuario($datos));
+        echo json_encode(obtenerGrupoDiaHoraUsuario($datos));
+    } else {
+        session_destroy();
+        echo json_encode(array("no_auth" => "tiempo expierado"));
+
+    }
+
 
 });
 
 $app->get('/gruposLibres/{dia}/{hora}/{id_usuario}', function ($request) {
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"]) && $_SESSION["tipo"] == "admin") {
+
+        $datos[] = $request->getAttribute("dia");
+        $datos[] = $request->getAttribute("hora");
+        $datos[] = $request->getAttribute("id_usuario");
+
+        echo json_encode(obtenerNoGrupoDiaHoraUsuario($datos));
+    } else {
+        session_destroy();
+        echo json_encode(array("no_auth" => "tiempo expierado"));
+
+    }
+});
+
+
+$app->delete('/borrarGrupo/{dia}/{hora}/{id_usuario}/{id_grupo}', function ($request) {
     $datos[] = $request->getAttribute("dia");
     $datos[] = $request->getAttribute("hora");
     $datos[] = $request->getAttribute("id_usuario");
 
-    echo json_encode(obtenerNoGrupoDiaHoraUsuario($datos));
+    $datos[] = $request->getAttribute("id_grupo");
+
+    echo json_encode(borrarUsuarioDeGuardia($datos));
 
 });
 
-
-// $app->delete('/borrarGrupo/{dia}/{hora}/{id_grupo}', function ($request) {
-//     $datos[] = $request->getAttribute("dia");
-//     $datos[] = $request->getAttribute("hora");
-//     $datos[] = $request->getAttribute("id_grupo");
-
-//     echo json_encode(borrarUsuarioDeGuardia($datos));
-
-// });
-
 $app->post('/insertarGrupo/{dia}/{hora}/{id_usuario}/{id_grupo}', function ($request) {
-    $datos[] = $request->getParam("dia");
-    $datos[] = $request->getParam("hora");
-    $datos[] = $request->getParam("id_grupo");
+    $datos[] = $request->getAttribute("dia");
+    $datos[] = $request->getAttribute("hora");
+    $datos[] = $request->getAttribute("id_usuario");
+
+    $datos[] = $request->getAttribute("id_grupo");
 
     echo json_encode(insertarUsuario($datos));
 

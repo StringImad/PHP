@@ -160,13 +160,10 @@ function obtenerGrupoDiaHoraUsuario($datos)
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
-            $consulta = "SELECT grupos.id_grupo ,grupos.nombre from grupos,horario_lectivo where horario_lectivo.grupo = grupos.id_grupo and  horario_lectivo.usuario = ? and horario_lectivo.dia= ? and horario_lectivo.hora = ?";
+            $consulta = "SELECT grupos.id_grupo ,grupos.nombre from grupos,horario_lectivo where horario_lectivo.grupo = grupos.id_grupo  and horario_lectivo.dia= ? and horario_lectivo.hora = ? and  horario_lectivo.usuario = ?";
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute($datos);
             $respuesta["grupos"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
-
-
             $sentencia = null;
             $conexion = null;
         } catch (PDOException $e) {
@@ -187,7 +184,7 @@ function obtenerNoGrupoDiaHoraUsuario($datos)
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
-            $consulta = "SELECT grupos.id_grupo ,grupos.nombre from grupos,horario_lectivo where horario_lectivo.grupo = grupos.id_grupo and  horario_lectivo.usuario <> ? and horario_lectivo.dia= ? and horario_lectivo.hora = ?";
+            $consulta = "SELECT grupos.id_grupo ,grupos.nombre from grupos,horario_lectivo where horario_lectivo.grupo = grupos.id_grupo  and horario_lectivo.dia= ? and horario_lectivo.hora = ? and  horario_lectivo.usuario <> ?";
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute($datos);
             $respuesta["grupos_libres"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -209,44 +206,46 @@ function obtenerNoGrupoDiaHoraUsuario($datos)
     return $respuesta;
 }
 
-// function borrarUsuarioDeGuardia($datos)
-// {
-//     try {
-//         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-//         try {
-//             $consulta = "DELETE  horario_lectivo.usuario from grupos,horario_lectivo where horario_lectivo.grupo = grupos.id_grupo and  horario_lectivo.grupo = ? and horario_lectivo.dia= ? and horario_lectivo.hora = ?";
-//             $sentencia = $conexion->prepare($consulta);
-//             $sentencia->execute($datos);
-//             $respuesta["mensaje"] = "grupo borrado con exito";
+ function borrarUsuarioDeGuardia($datos)
+ {
+     try {
+         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+         try {
+             $consulta = "DELETE from horario_lectivo where dia = ? and hora = ? and usuario = ? and grupo = ?";
+             $sentencia = $conexion->prepare($consulta);
+             $sentencia->execute($datos);
+             $respuesta["mensaje"] = "grupo borrado con exito";
 
 
 
-//             $sentencia = null;
-//             $conexion = null;
-//         } catch (PDOException $e) {
-//             $respuesta["error"] = "error al  conectar:" . $e->getMessage();
+             $sentencia = null;
+             $conexion = null;
+         } catch (PDOException $e) {
+             $respuesta["error"] = "error al  conectar:" . $e->getMessage();
 
-//         }
-//         $sentencia = null;
-//         $conexion = null;
-//     } catch (PDOException $e) {
+         }
+         $sentencia = null;
+         $conexion = null;
+     } catch (PDOException $e) {
 
-//         $respuesta["error"] = "error al  conectar:" . $e->getMessage();
-//     }
-//     return $respuesta;
-// }
+         $respuesta["error"] = "error al  conectar:" . $e->getMessage();
+     }
+     return $respuesta;
+ }
 
 function insertarUsuario($datos)
 {
     try {
         $conexion = new PDO("mysql:host=" . SERVIDOR_BD . ";dbname=" . NOMBRE_BD, USUARIO_BD, CLAVE_BD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         try {
-        $consulta = "INSERT INTO horario_lectivo (dia, hora, usuario, grupo) VALUES (?,?,?,?)";
-        
-        $sentencia = $conexion->prepare($consulta);
-        $sentencia->execute($datos);
+            $consulta = "INSERT INTO horario_lectivo (dia, hora, usuario, grupo,aula) VALUES (?,?,?,?,'No creo')";
 
-        $respuesta["mensaje"] = "Grupo insertado con exito";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->execute($datos);
+
+            $respuesta["mensaje"] = "Grupo insertado con exito";
+            $respuesta["depu"]=$datos;
+
         } catch (PDOException $e) {
 
             $respuesta["error"] = "error al  conectar:" . $e->getMessage();

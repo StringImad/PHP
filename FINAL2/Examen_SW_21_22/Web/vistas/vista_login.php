@@ -86,10 +86,12 @@ if (isset($_POST['btnLogin'])) {
         </p>
     </form>
     <p> <?php
-           if(isset($_SESSION["seguridad"])){
-           echo $_SESSION["seguridad"];
-
-           }
+            if (isset($_SESSION["mensaje_accion"])) {
+                echo "Hay un mensaje: " . $_SESSION["mensaje_accion"];
+            }
+            if (isset($_SESSION["seguridad"])) {
+                echo "Hay un mensaje de seguridad: " . $_SESSION["seguridad"];
+            }
         ?></p>
 </body>
 

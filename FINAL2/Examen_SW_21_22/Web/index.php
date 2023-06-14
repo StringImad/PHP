@@ -14,7 +14,7 @@ if (isset($_SESSION["usuario"])) {
     require "src/seguridad.php";
     //LOGIN realizado con exito
 
-    if ($_SESSION["tipo"] == "Admin") {
+    if ($_SESSION["tipo"] == "admin") {
         require "vistas/vista_admin.php";
 
     } else {
